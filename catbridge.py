@@ -18,6 +18,10 @@ import openai
 
 # *********** Read File ***********
 def read_upload(file_name):
+    """
+    Read the uploaded file and return a dataframe
+    supported file format: csv, txt, tsv, xls, xlsx
+    """
     #if the last 3 letters of the file name is csv, we use csv module to read it
     if file_name[-3:] == 'csv':
         df = pd.read_csv(file_name, index_col=0)
@@ -27,11 +31,20 @@ def read_upload(file_name):
     #if the last 3 letters of the file name is tsv, we use csv module to read it
     elif file_name[-3:] == 'tsv':
         df = pd.read_csv(file_name, sep='\t', index_col=0)
+    elif file_name[-3:] == 'xls':
+        df = pd.read_excel(file_name, index_col=0)
+    elif file_name[-4:] == 'xlsx':
+        df = pd.read_excel(file_name, index_col=0)
+    else:
+        print('File format is not supported')
     return df
 
 
-#target compounds
+#get target compounds
 def read_target(name, df):
+    """
+    find the target compound in the dataframe and return the row of the target
+    """
     if name in df.index:
         name = df.loc[name].tolist()
     else:
@@ -48,6 +61,9 @@ def read_target(name, df):
 # ************* Normalize ************
 #def normalize function, that allow log2, log10, and z-score
 def normalize(df, method):
+    """
+    Normalize the data using the specified method.
+    """
     if method == 'log2':
         df = np.log2(df + 1)
     elif method == 'log10':
@@ -60,6 +76,9 @@ def normalize(df, method):
     
 #  ************* Scaling ***************
 def scaling(df, method):
+    """
+    Scale the data using the specified method.
+    """
     if method == 'min-max':
         scaler = MinMaxScaler()
         df = scaler.fit_transform(df)
@@ -67,8 +86,9 @@ def scaling(df, method):
         df = (df - df.mean()) / np.sqrt(df.std())
         
         
-        
 
+
+# ************* Merge ***************
 def merge_dataframes(dataframes):
     """
     Merge multiple dataframes based on the 'Name' column.
@@ -91,7 +111,11 @@ def merge_dataframes(dataframes):
     return merged_dataframe 
 
 
+# ************* One Column Scaling ***************
 def scale_column(df, column_name):
+    """
+    Scale the values of a column using the MinMaxScaler.
+    """
     # Create a scaler object
     scaler = MinMaxScaler()
 
@@ -127,7 +151,6 @@ def plot_line(target, title):
     return
 
 
-
 def plot_heatmap(dataframe, palette='viridis', figsize=(10, 8), row_threshold=50, save_path=None):
     #remov the rows that have all 0 values
     dataframe = dataframe.loc[~(dataframe==0).all(axis=1)]
@@ -145,7 +168,6 @@ def plot_heatmap(dataframe, palette='viridis', figsize=(10, 8), row_threshold=50
     
     plt.show()
     return 
-
 
 
 
@@ -196,8 +218,16 @@ def plot_line_heatmap(df, name_value, cmap='vlag'):
 
 
 
-
 def plot_data(df, name_value, ax1, ax2, cmap='vlag'):
+    """
+    plot the line graph and heatmap for the given gene name
+    
+    df: dataframe
+    name_value: the name of the gene
+    ax1: the axis for the line graph, ax1 = plt.subplot(grid[:9])
+    ax2: the axis for the heatmap, ax2 = plt.subplot(grid[9:])
+    cmap: the color map for the heatmap
+    """
     # Find the row where 'Name' is equal to name_value
     row = df.loc[df['Name'] == name_value]
 
@@ -226,6 +256,9 @@ def plot_data(df, name_value, ax1, ax2, cmap='vlag'):
 
 
 def plot_all_data(df):
+    """
+    plot the line graph and heatmap for the top 10 genes in the dataframe
+    """
     df = df.head(10)
     num_rows = df.shape[0]
     fig = plt.figure(figsize=(10, num_rows * 2))  # adjust the figure height based on the number of rows
@@ -360,16 +393,47 @@ def compute_granger(df, target, maxlag=2):
     return results_df
 
 
-def compute_score(data, col1, col2, column_name, keywords):
-    data['score'] = data[col1] + data[col2]
-    data[column_name] = data[column_name].astype(str)
-    data = data.apply(convert_description_to_score, args=(column_name, keywords), axis=1)
+# ***************  compute score ******************
+def compute_score(data, col1, desc_col=None, col2=None, keywords=None):
+    """
+    Compute a score based on specified columns of a dataframe. Can also convert a description
+    column to a score based on specified keywords. 
+
+    Parameters:
+    data (pandas.DataFrame): The dataframe to process.
+    col1 (str): The name of the first column to include in the score.
+    desc_col (str, optional): The name of the description column to convert to a score. Defaults to None.
+    col2 (str, optional): The name of a second column to include in the score. Defaults to None.
+    keywords (list, optional): List of keywords to use in converting the description to a score. Defaults to None.
+
+    Returns:
+    pandas.DataFrame: The processed dataframe, sorted by score in descending order.
+    """
+    try:
+        if col2 is not None:
+            data['score'] = data[col1] + data[col2]
+        else:
+            data['score'] = data[col1]
+    except KeyError as e:
+        print(f"Error: {e} not found in dataframe.")
+        return None
+    
+    if desc_col is not None:
+        try:
+            data[desc_col] = data[desc_col].astype(str)
+            if keywords is not None:
+                data = data.apply(convert_description_to_score, args=(desc_col, keywords), axis=1)
+        except KeyError as e:
+            print(f"Error: {e} not found in dataframe.")
+            return None
+        
     data = data.sort_values(by='score', ascending=False)
     try:
         data = data.drop(columns=['index', 'level_0'])
     except:
         pass
     return data
+
 
 
 def convert_description_to_score(row, column_name, keywords):
