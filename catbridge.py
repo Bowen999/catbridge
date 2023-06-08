@@ -1,3 +1,13 @@
+"""
+Package Name: your_package_name
+Version: your_package_version
+Description: A detailed description of your package, what it does, and how to use it. 
+
+For more detailed information on specific functions or classes, use the help() function on them. For example:
+help(your_package_name.your_function_name)
+"""
+
+
 import pandas as pd
 import numpy as np
 from sklearn.preprocessing import MinMaxScaler
