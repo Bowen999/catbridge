@@ -24,6 +24,11 @@ from statsmodels.tsa.stattools import grangercausalitytests
 from sklearn.preprocessing import MinMaxScaler
 import subprocess
 
+import pandas as pd
+from tslearn.clustering import TimeSeriesKMeans
+from tslearn.preprocessing import TimeSeriesScalerMeanVariance
+
+
 import openai
 
 
@@ -401,50 +406,65 @@ def fc_comp():
 
 
 # ***************  compute score ******************
-
-
-
-def compute_score(data, col1, desc_col=None, col2=None, keywords=None):
+def score(df):
     """
-    Compute a score based on specified columns of a dataframe. Can also convert a description
-    column to a score based on specified keywords. 
-
-    Parameters:
-    data (pandas.DataFrame): The dataframe to process.
-    col1 (str): The name of the first column to include in the score.
-    desc_col (str, optional): The name of the description column to convert to a score. Defaults to None.
-    col2 (str, optional): The name of a second column to include in the score. Defaults to None.
-    keywords (list, optional): List of keywords to use in converting the description to a score. Defaults to None.
-
-    Returns:
-    pandas.DataFrame: The processed dataframe, sorted by score in descending order.
+    Compute a score based on specified columns of a dataframe, and rank the rows based on the score.
     """
-    data[col2] = data[col2].astype(float)
-    data[col1] = data[col1].astype(str)
-    try:
-        if col2 is not None:
-            data['score'] = data[col1] + data[col2]
-        else:
-            data['score'] = data[col1]
-    except KeyError as e:
-        print(f"Error: {e} not found in dataframe.")
-        return None
+    # Exclude the 'Name' column and compute row sums
+    df['Score'] = df.drop(columns=['Name']).sum(axis=1)
     
-    if desc_col is not None:
-        try:
-            data[desc_col] = data[desc_col].astype(str)
-            if keywords is not None:
-                data = data.apply(convert_description_to_score, args=(desc_col, keywords), axis=1)
-        except KeyError as e:
-            print(f"Error: {e} not found in dataframe.")
-            return None
+    # Rank rows from high to low based on the sum, '1' being the highest rank
+    df['Rank'] = df['Score'].rank(method='min', ascending=False)
+    
+    # Sort dataframe by rank
+    df_sorted = df.sort_values('Rank')
+    # df_sorted.set_index('Rank', inplace=True)
+    # df_sorted = df_sorted[['Name', 'Score', 'Rank']]
+    
+    return df_sorted
+
+
+# def compute_score(data, col1, desc_col=None, col2=None, keywords=None):
+#     """
+#     Compute a score based on specified columns of a dataframe. Can also convert a description
+#     column to a score based on specified keywords. 
+
+#     Parameters:
+#     data (pandas.DataFrame): The dataframe to process.
+#     col1 (str): The name of the first column to include in the score.
+#     desc_col (str, optional): The name of the description column to convert to a score. Defaults to None.
+#     col2 (str, optional): The name of a second column to include in the score. Defaults to None.
+#     keywords (list, optional): List of keywords to use in converting the description to a score. Defaults to None.
+
+#     Returns:
+#     pandas.DataFrame: The processed dataframe, sorted by score in descending order.
+#     """
+#     data[col2] = data[col2].astype(float)
+#     data[col1] = data[col1].astype(str)
+#     try:
+#         if col2 is not None:
+#             data['score'] = data[col1] + data[col2]
+#         else:
+#             data['score'] = data[col1]
+#     except KeyError as e:
+#         print(f"Error: {e} not found in dataframe.")
+#         return None
+    
+#     if desc_col is not None:
+#         try:
+#             data[desc_col] = data[desc_col].astype(str)
+#             if keywords is not None:
+#                 data = data.apply(convert_description_to_score, args=(desc_col, keywords), axis=1)
+#         except KeyError as e:
+#             print(f"Error: {e} not found in dataframe.")
+#             return None
         
-    data = data.sort_values(by='score', ascending=False)
-    try:
-        data = data.drop(columns=['index', 'level_0'])
-    except:
-        pass
-    return data
+#     data = data.sort_values(by='score', ascending=False)
+#     try:
+#         data = data.drop(columns=['index', 'level_0'])
+#     except:
+#         pass
+#     return data
 
 
 keywords_scores = {'ase': 0.2, 'enzyme': 0.2, 'synthase': 0.2}
@@ -483,7 +503,36 @@ def annotation_score(df, keywords=keywords_scores):
     return df
 
 
+# Clustering
+def ts_clustering(df, n_clusters):
+    """
+    Cluster the time series data in the input dataframe using the TS-KMeans algorithm.
+    
+    Parameters:
+        df (pandas.DataFrame): The input dataframe.
+        n_clusters (int): The number of clusters to create.
+    """
+    # Convert DataFrame to NumPy array for compatibility with tslearn
+    data = df.values
 
+    # Rescale the time series data so that their mean is 0 and their standard deviation is 1
+    scaler = TimeSeriesScalerMeanVariance(mu=0., std=1.)
+    data_scaled = scaler.fit_transform(data)
+
+    # Create the KMeans model
+    km = TimeSeriesKMeans(n_clusters=n_clusters, metric="euclidean", max_iter=5, random_state=0)
+
+    # Fit the model to the data
+    km.fit(data_scaled)
+
+    # Get the cluster labels for each time series
+    labels = km.labels_
+
+    # Add the labels as a new column in the original DataFrame
+    df['Cluster'] = labels
+    df = df['Cluster']
+
+    return df
 
 
 
@@ -646,6 +695,190 @@ def smart_aleck(question):
     )
 
     return completion.choices[0].message.content
+
+
+
+
+# ************* Pipeline *************
+def pipeline1(gene_file, metabo_file, design_file, annotation_file, target, cluster_count, aggregation_func=repeat_aggregation_mean):
+    """
+    This function processes gene expression data, performs computations, and returns annotated results.
+
+    Parameters:
+    - gene_file (str): The filename of the gene count data.
+    - metabo_file (str): The filename of the metabolome data.
+    - design_file (str): The filename of the experimental design data.
+    - annotation_file (str): The filename of the gene annotation data.
+    - target (str): The target metabolite for the analysis.
+    - cluster_count (int): The number of clusters for time series clustering.
+    - aggregation_func (function): The function to be used for data aggregation.
+
+    Returns:
+    - result_with_annotation (pd.DataFrame): A pandas DataFrame containing the processed results, with annotations and clustering information.
+    """
+
+    # Read data
+    gene = read_upload(gene_file)
+    metabo = read_upload(metabo_file)
+    design = read_upload(design_file)
+    annotation = read_upload(annotation_file)
+
+    # Process data
+    processed_gene = aggregation_func(gene, design)
+    processed_metabo = aggregation_func(metabo, design)
+
+    # Get target data
+    t = get_target(target, processed_metabo)
+
+    # Compute Granger causality
+    granger = compute_granger(processed_gene, t, 1)
+
+    # Prepare dataframe for fold change calculation
+    df_for_fc(processed_metabo, target, gene, design)
+
+    # Compute fold change
+    fc = fc_comp()
+
+    # Merge and annotate data
+    data = merge_dataframes([granger, fc, annotation])
+    data = annotation_score(data)
+
+    # Compute score and perform clustering
+    result = score(data)
+    cluster = ts_clustering(processed_gene, cluster_count)
+
+    # Merge results and set index
+    result_with_annotation = merge_dataframes([result, annotation, cluster])
+    result_with_annotation.set_index('Rank', inplace=True)
+
+    return result_with_annotation
+
+
+
+
+
+
+
+def pipeline2(gene_file, metabo_file, design_file, annotation_file, target, cluster_count, annotation, aggregation_func=repeat_aggregation_mean):
+    """
+    This function processes gene expression data, performs computations, and returns annotated results.
+
+    Parameters:
+    - gene_file (str): The filename of the gene count data.
+    - metabo_file (str): The filename of the metabolome data.
+    - design_file (str): The filename of the experimental design data.
+    - annotation_file (str): The filename of the gene annotation data.
+    - target (str): The target metabolite for the analysis.
+    - cluster_count (int): The number of clusters for time series clustering.
+    - annotation (bool): A flag to indicate whether to perform annotation or not.
+    - aggregation_func (function): The function to be used for data aggregation.
+
+    Returns:
+    - result_with_annotation (pd.DataFrame): A pandas DataFrame containing the processed results, with annotations and clustering information.
+    """
+
+    # Read data
+    gene = read_upload(gene_file)
+    metabo = read_upload(metabo_file)
+    design = read_upload(design_file)
+    
+    # Process data
+    processed_gene = aggregation_func(gene, design)
+    processed_metabo = aggregation_func(metabo, design)
+
+    # Get target data
+    t = get_target(target, processed_metabo)
+
+    # Compute Granger causality
+    granger = compute_granger(processed_gene, t, 1)
+
+    # Prepare dataframe for fold change calculation
+    df_for_fc(processed_metabo, target, gene, design)
+
+    # Compute fold change
+    fc = fc_comp()
+
+    # Merge and annotate data
+    data = merge_dataframes([granger, fc])
+    
+    # Compute score and perform clustering
+    result = score(data)
+    cluster = ts_clustering(processed_gene, cluster_count)
+    
+    # Merge results and set index
+    if annotation:
+        annotation = read_upload(annotation_file)
+        result_with_annotation = merge_dataframes([result, annotation, cluster])
+        data = merge_dataframes([data, annotation])
+        data = annotation_score(data)
+    else:
+        result_with_annotation = merge_dataframes([result, cluster])
+    result_with_annotation.set_index('Rank', inplace=True)
+    
+    return result_with_annotation
+
+
+
+
+
+
+def pipeline(gene_file, metabo_file, design_file, annotation_file, target, cluster_count, aggregation_func=repeat_aggregation_mean):
+    """
+    This function processes gene expression data, performs computations, and returns results.
+
+    Parameters:
+    - gene_file (str): The filename of the gene count data.
+    - metabo_file (str): The filename of the metabolome data.
+    - design_file (str): The filename of the experimental design data.
+    - annotation_file (str): The filename of the gene annotation data (can be None).
+    - target (str): The target metabolite for the analysis.
+    - cluster_count (int): The number of clusters for time series clustering.
+    - aggregation_func (function): The function to be used for data aggregation.
+
+    Returns:
+    - result_with_annotation (pd.DataFrame): A pandas DataFrame containing the processed results, with annotations and clustering information if provided.
+    """
+    # Read data
+    gene = read_upload(gene_file)
+    metabo = read_upload(metabo_file)
+    design = read_upload(design_file)
+
+    # Process data
+    processed_gene = aggregation_func(gene, design)
+    processed_metabo = aggregation_func(metabo, design)
+
+    # Get target data
+    t = get_target(target, processed_metabo)
+
+    # Compute Granger causality
+    granger = compute_granger(processed_gene, t, 1)
+
+    # Prepare dataframe for fold change calculation
+    df_for_fc(processed_metabo, target, gene, design)
+
+    # Compute fold change
+    fc = fc_comp()
+
+    # Merge data
+    data = merge_dataframes([granger, fc])
+    
+    # Compute score
+    result = score(data)
+
+    # Perform clustering
+    cluster = ts_clustering(processed_gene, cluster_count)
+    
+    if annotation_file is not None:
+        annotation = read_upload(annotation_file)
+        data = merge_dataframes([data, annotation])
+        data = annotation_score(data)
+        result_with_annotation = merge_dataframes([result, annotation, cluster])
+    else:
+        result_with_annotation = merge_dataframes([result, cluster])
+    result_with_annotation.set_index('Rank', inplace=True)
+
+    return result_with_annotation
+
 
 
 
