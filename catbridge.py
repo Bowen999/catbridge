@@ -1,12 +1,21 @@
 """
-Package Name: your_package_name
-Version: your_package_version
+Package Name: CAT Bridge (Compounds And Trancrips Bridge)
+Author: Bowen Yang
+email: by8@ualberta
+Version: 0.1.0
 Description: A detailed description of your package, what it does, and how to use it. 
 
 For more detailed information on specific functions or classes, use the help() function on them. For example:
 help(your_package_name.your_function_name)
-"""
 
+
+#  ██████╗ █████╗ ████████╗    ██████╗ ██████╗ ██╗██████╗  ██████╗ ███████╗
+# ██╔════╝██╔══██╗╚══██╔══╝    ██╔══██╗██╔══██╗██║██╔══██╗██╔════╝ ██╔════╝
+# ██║     ███████║   ██║       ██████╔╝██████╔╝██║██║  ██║██║  ███╗█████╗  
+# ██║     ██╔══██║   ██║       ██╔══██╗██╔══██╗██║██║  ██║██║   ██║██╔══╝  
+# ╚██████╗██║  ██║   ██║       ██████╔╝██║  ██║██║██████╔╝╚██████╔╝███████╗
+#  ╚═════╝╚═╝  ╚═╝   ╚═╝       ╚═════╝ ╚═╝  ╚═╝╚═╝╚═════╝  ╚═════╝ ╚══════╝
+"""
 
 import pandas as pd
 import numpy as np
@@ -15,6 +24,12 @@ from sklearn.preprocessing import MinMaxScaler
 import matplotlib.pyplot as plt
 import seaborn as sns
 import matplotlib.gridspec as gridspec
+from bioinfokit import analys, visuz
+import matplotlib.pyplot as plt
+from matplotlib.patches import Circle
+from PIL import Image
+import networkx as nx
+from sklearn.metrics.pairwise import cosine_similarity
 
 
 from scipy.stats import spearmanr
@@ -23,20 +38,28 @@ import numpy as np
 from statsmodels.tsa.stattools import grangercausalitytests
 from sklearn.preprocessing import MinMaxScaler
 import subprocess
+import math
+from sklearn.decomposition import PCA
+from sklearn.cluster import KMeans
 
 import pandas as pd
 from tslearn.clustering import TimeSeriesKMeans
 from tslearn.preprocessing import TimeSeriesScalerMeanVariance
 
-
 import openai
+import getpass
 
 
 
 """
 ***********  1. Pre-Processing ***********
+#  ██████╗ █████╗ ████████╗    ██████╗ ██████╗ ██╗██████╗  ██████╗ ███████╗
+# ██╔════╝██╔══██╗╚══██╔══╝    ██╔══██╗██╔══██╗██║██╔══██╗██╔════╝ ██╔════╝
+# ██║     ███████║   ██║       ██████╔╝██████╔╝██║██║  ██║██║  ███╗█████╗  
+# ██║     ██╔══██║   ██║       ██╔══██╗██╔══██╗██║██║  ██║██║   ██║██╔══╝  
+# ╚██████╗██║  ██║   ██║       ██████╔╝██║  ██║██║██████╔╝╚██████╔╝███████╗
+#  ╚═════╝╚═╝  ╚═╝   ╚═╝       ╚═════╝ ╚═╝  ╚═╝╚═╝╚═════╝  ╚═════╝ ╚══════╝
 """ 
-
 
 # *********** Read File ***********
 def read_upload(file_name):
@@ -220,11 +243,21 @@ def merge_dataframes(dataframes):
 
 
 
+
+
+
+
    
    
 """
 ************** 2 COMPUTE ******************
-"""
+#  ██████╗ █████╗ ████████╗    ██████╗ ██████╗ ██╗██████╗  ██████╗ ███████╗
+# ██╔════╝██╔══██╗╚══██╔══╝    ██╔══██╗██╔══██╗██║██╔══██╗██╔════╝ ██╔════╝
+# ██║     ███████║   ██║       ██████╔╝██████╔╝██║██║  ██║██║  ███╗█████╗  
+# ██║     ██╔══██║   ██║       ██╔══██╗██╔══██╗██║██║  ██║██║   ██║██╔══╝  
+# ╚██████╗██║  ██║   ██║       ██████╔╝██║  ██║██║██████╔╝╚██████╔╝███████╗
+#  ╚═════╝╚═╝  ╚═╝   ╚═╝       ╚═════╝ ╚═╝  ╚═╝╚═╝╚═════╝  ╚═════╝ ╚══════╝
+""" 
 
 # ************* 2.1 Correlation Score ***************
 
@@ -388,6 +421,18 @@ def df_for_fc(df1, target, df2, design):
     # Saving to CSV files instead of returning
     design_fc.to_csv('result/design_fc.csv')
     matrix_fc.to_csv('result/matrix_fc.csv')
+    
+    
+
+def no_repeat_fc(df, noontide):
+    df['log2FoldChange'] = df[noontide[0]]/df[noontide[1]]
+    df['log2FoldChange'] = df['log2FoldChange'].apply(lambda x: math.log2(x))
+    #make the range of log2FoldChange from 0-1
+    scaler = MinMaxScaler()
+    # Apply the scaler to the 'log2FoldChange' column
+    df['log2FoldChange'] = scaler.fit_transform(df[['log2FoldChange']])
+    df = df[['log2FoldChange']]
+    return df
 
 
 
@@ -422,49 +467,6 @@ def score(df):
     # df_sorted = df_sorted[['Name', 'Score', 'Rank']]
     
     return df_sorted
-
-
-# def compute_score(data, col1, desc_col=None, col2=None, keywords=None):
-#     """
-#     Compute a score based on specified columns of a dataframe. Can also convert a description
-#     column to a score based on specified keywords. 
-
-#     Parameters:
-#     data (pandas.DataFrame): The dataframe to process.
-#     col1 (str): The name of the first column to include in the score.
-#     desc_col (str, optional): The name of the description column to convert to a score. Defaults to None.
-#     col2 (str, optional): The name of a second column to include in the score. Defaults to None.
-#     keywords (list, optional): List of keywords to use in converting the description to a score. Defaults to None.
-
-#     Returns:
-#     pandas.DataFrame: The processed dataframe, sorted by score in descending order.
-#     """
-#     data[col2] = data[col2].astype(float)
-#     data[col1] = data[col1].astype(str)
-#     try:
-#         if col2 is not None:
-#             data['score'] = data[col1] + data[col2]
-#         else:
-#             data['score'] = data[col1]
-#     except KeyError as e:
-#         print(f"Error: {e} not found in dataframe.")
-#         return None
-    
-#     if desc_col is not None:
-#         try:
-#             data[desc_col] = data[desc_col].astype(str)
-#             if keywords is not None:
-#                 data = data.apply(convert_description_to_score, args=(desc_col, keywords), axis=1)
-#         except KeyError as e:
-#             print(f"Error: {e} not found in dataframe.")
-#             return None
-        
-#     data = data.sort_values(by='score', ascending=False)
-#     try:
-#         data = data.drop(columns=['index', 'level_0'])
-#     except:
-#         pass
-#     return data
 
 
 keywords_scores = {'ase': 0.2, 'enzyme': 0.2, 'synthase': 0.2}
@@ -538,8 +540,30 @@ def ts_clustering(df, n_clusters):
 
 
 
-#********* 3 PLOT FUNCTION ********
-#plot a line plot for the target
+
+
+
+
+
+
+
+
+
+
+
+
+
+#********* 3 PLOT FUNCTION ********   
+#  ██████╗ █████╗ ████████╗    ██████╗ ██████╗ ██╗██████╗  ██████╗ ███████╗
+# ██╔════╝██╔══██╗╚══██╔══╝    ██╔══██╗██╔══██╗██║██╔══██╗██╔════╝ ██╔════╝
+# ██║     ███████║   ██║       ██████╔╝██████╔╝██║██║  ██║██║  ███╗█████╗  
+# ██║     ██╔══██║   ██║       ██╔══██╗██╔══██╗██║██║  ██║██║   ██║██╔══╝  
+# ╚██████╗██║  ██║   ██║       ██████╔╝██║  ██║██║██████╔╝╚██████╔╝███████╗
+#  ╚═════╝╚═╝  ╚═╝   ╚═╝       ╚═════╝ ╚═╝  ╚═╝╚═╝╚═════╝  ╚═════╝ ╚══════╝
+    
+    
+    
+# Line
 def plot_line(target, title):
     plt.figure(figsize=(10, 3))
     plt.plot(target)
@@ -547,7 +571,7 @@ def plot_line(target, title):
     plt.show()
     return
 
-
+# Heatmap
 def plot_heatmap(dataframe, palette='viridis', figsize=(10, 8), row_threshold=50, save_path=None):
     #remov the rows that have all 0 values
     dataframe = dataframe.loc[~(dataframe==0).all(axis=1)]
@@ -567,7 +591,7 @@ def plot_heatmap(dataframe, palette='viridis', figsize=(10, 8), row_threshold=50
     return 
 
 
-
+# Hexbin
 def plot_hexbin(data, x_axis, y_axis, gridsize=20):
     sns.jointplot(x=x_axis, y=y_axis, data=data, kind='hex', gridsize=20)
     plt.xlabel(x_axis)
@@ -575,8 +599,16 @@ def plot_hexbin(data, x_axis, y_axis, gridsize=20):
     plt.show()
 
 
-
+# Line Heatmap
 def plot_line_heatmap(df, name_value, cmap='vlag'):
+    """
+    Plot a line plot and a heatmap of the specified row in the input dataframe.
+    
+    Parameters:
+        df (pandas.DataFrame): The input dataframe.
+        name_value (str): The value in the 'Name' column of the row to plot.
+        cmap (str): The name of the colormap to use for the heatmap. Defaults to 'vlag'.
+    """
     # Find the row where 'Name' is equal to name_value
     row = df.loc[df['Name'] == name_value]
 
@@ -614,7 +646,7 @@ def plot_line_heatmap(df, name_value, cmap='vlag'):
     plt.show()
 
 
-
+# Line Heatmap for all data
 def plot_data(df, name_value, ax1, ax2, cmap='vlag'):
     """
     plot the line graph and heatmap for the given gene name
@@ -678,13 +710,198 @@ def plot_all_data(df):
 
 
 
+# Volcano Plot
+def plot_volcano(path, lfc_threshold, padj_threshold):
+    # Import and preprocess data
+    fc_for_volcano = pd.read_csv(path)
+    fc_for_volcano.reset_index(inplace=True)
+    fc_for_volcano.rename(columns={'index':'Name'}, inplace=True)
+    gene_exp = fc_for_volcano
+    gene_exp = gene_exp.dropna(subset=['padj'])
+
+    # Check if at least 10 gene names exist
+    genenames = gene_exp['Name'].head(10) if len(gene_exp['Name']) >= 10 else None
+
+    # Create plot
+    visuz.GeneExpression.volcano(df=gene_exp, 
+                                lfc='log2FoldChange', pv='padj', sign_line=True,
+                                lfc_thr=(lfc_threshold, lfc_threshold), pv_thr=(padj_threshold, padj_threshold),
+                                plotlegend=True, legendpos='upper right', legendanchor=(1.46,1),
+                                color=('maroon','gainsboro','steelblue'), theme='whitesmoke',
+                                valpha=1, dotsize=5,
+                                geneid = 'Name',
+                                genenames = tuple(genenames) if genenames is not None else None,
+                                )
+
+    # Save and display image
+    # plt.savefig('result/volcano_plot.png')
+    img = Image.open('volcano.png')
+    
+    img = Image.open('volcano.png')  # replace with your image file path if not in the same directory
+
+    # Create a figure and a set of subplots
+    fig, ax = plt.subplots()
+
+    # Display the image
+    ax.imshow(img)
+
+    # Remove the axis
+    ax.axis('off')
+
+    # Show the figure
+    plt.show()
+
+    # return gene_exp
+
+
+
+def plot_ts_clusters(result, processed_gene, palette_name='Paired'):
+    result = result[['Name', 'Cluster']]
+    data = merge_dataframes([result, processed_gene])
+
+    # Drop the 'Name' column
+    data = data.drop(columns=['Name'])
+
+    # Reset index, group by 'Cluster', and set the index back
+    data = data.reset_index()
+    grouped = data.groupby('Cluster')
+
+    # Set color palette
+    palette = sns.color_palette(palette_name, 12)  # The palette_name palette has maximum 12 distinct colors
+
+    # Iterate over groups (clusters) and plot each one
+    for name, group in grouped:
+        group = group.set_index('index')  # set the index back to 'index'
+        group = group.drop(columns='Cluster')  # drop the 'Cluster' column
+
+        plt.figure(figsize=(10, 6))
+        for i, feature in enumerate(group.index):
+            plt.plot(group.columns, group.loc[feature], color=palette[i % len(palette)])
+
+        plt.xlabel('Time')
+        plt.ylabel('Value')
+        plt.title(f'Cluster: {name}', weight='bold')
+        plt.show()
+
+
+
+# PCA
+def plot_pca(gene, design, n_clusters):
+    # transpose your DataFrame, as PCA works on the features (columns), not on the samples (rows)
+    gene_transposed = gene.T
+
+    # Perform PCA on your data
+    pca = PCA(n_components=2)  # here we ask for the first two principal components
+    pca_result = pca.fit_transform(gene_transposed)
+
+    # convert the PCA result to a DataFrame
+    pca_df = pd.DataFrame(data=pca_result, columns=['PC1', 'PC2'])
+
+    # add a 'sample' column
+    pca_df['sample'] = gene_transposed.index
+
+    # get group information from the design dataframe
+    pca_df = pca_df.merge(design[['group']], left_on='sample', right_index=True)
+
+    if n_clusters:
+        # Perform K-means clustering
+        kmeans = KMeans(n_clusters=n_clusters, random_state=0).fit(pca_df[['PC1', 'PC2']])
+        pca_df['Cluster'] = kmeans.labels_
+
+        # create the figure and axis objects
+        fig, ax = plt.subplots(figsize=(8, 6))
+
+        # plot the points on the scatterplot
+        scatter = sns.scatterplot(x="PC1", y="PC2", hue="group", data=pca_df, palette="Paired", s=100, alpha=0.7, ax=ax)
+
+        # for each cluster, add a circle at the mean coordinates with radius proportional to the standard deviation
+        for cluster in set(kmeans.labels_):
+            cluster_points = pca_df[pca_df['Cluster'] == cluster][['PC1', 'PC2']]
+            # calculate mean and standard deviation for the cluster
+            cluster_mean = cluster_points.mean().values
+            cluster_std = cluster_points.std().values
+            # add a circle at the mean coordinates with radius=stddev
+            circle = Circle(cluster_mean, np.linalg.norm(cluster_std), alpha=0.1)
+            ax.add_artist(circle)
+
+        # hide the legend
+        ax.get_legend().remove()
+    else:
+        # create the figure and axis objects
+        fig, ax = plt.subplots(figsize=(8, 6))
+
+        # plot the points on the scatterplot without clustering
+        scatter = sns.scatterplot(x="PC1", y="PC2", hue="group", data=pca_df, palette="Paired", s=100, alpha=0.7, ax=ax)
+
+        # hide the legend
+        ax.get_legend().remove()
+
+    # annotate points on the graph with the sample names
+    for i, sample in enumerate(pca_df['sample']):
+        plt.annotate(sample, (pca_df.iloc[i].PC1, pca_df.iloc[i].PC2), color='gray')
+
+    plt.xlabel('PC1')
+    plt.ylabel('PC2')
+    plt.title('PCA with K-means clustering', fontweight='bold')
+
+    plt.show()
+
+
+
+
+def plot_network(data, target_index, num_nodes):
+    # Compute the similarity
+    similarity = cosine_similarity(data)
+    similarity_df = pd.DataFrame(similarity, index=data.index, columns=data.index)
+    
+    # Get the top num_nodes similar nodes for the target
+    target_similarities = similarity_df.loc[target_index].sort_values(ascending=False)[1:num_nodes+1].to_dict()
+
+    # Create a network graph
+    G = nx.Graph()
+
+    # Add nodes and edges
+    for node, similarity in target_similarities.items():
+        G.add_edge(target_index, node, weight=similarity)
+    
+    # Draw the network
+    plt.figure(figsize=(8,8))
+    pos = nx.spring_layout(G)
+    colors = ['red' if node == target_index else 'moccasin' for node in G.nodes()]
+    
+    nx.draw_networkx_nodes(G, pos, node_color=colors)
+    nx.draw_networkx_labels(G, pos, font_size=8)
+    nx.draw_networkx_edges(G, pos, edge_color='gray', width=[G[u][v]['weight'] for u,v in G.edges()], alpha=0.7)
+
+    plt.title(f'Top {num_nodes} similar nodes to the target', fontsize=10)
+    plt.axis('off')  # to turn off the frame
+    plt.show()
+
+
+
+
+
+
+
+
 # AI
-def smart_aleck(question):
-    openai.api_key = "my_api_key"
+def Yuanfang(df, target):
+    # annotation = read_upload(annotation_file)
+    # df = merge_dataframes([df, annotation])
+    df = df.head(20)
+    
+    hits = df['Description'].to_list()
+    hits = [str(item) for item in hits]
+    hits = ', '.join(hits)
+    
+    q = hits + '\n\n\nWhich one may be involved in the synthesis of ' + target + '?'
+    
+    openai_api_key = getpass.getpass("Please enter your OpenAI API Key: ")
+    openai.api_key = openai_api_key
 
     messages = [
-        {"role": "system", "content": "You are a biological chemist and can explain biological mechanisms, and also translate your answer to Chinese"},
-        {"role": "user", "content": question}
+        {"role": "system", "content": "You are a biological chemist and can explain biological mechanisms"},
+        {"role": "user", "content": q}
     ]
 
     completion = openai.ChatCompletion.create(
@@ -693,191 +910,93 @@ def smart_aleck(question):
         max_tokens = 2000,
         messages = messages
     )
+    
+    print(' ')
+    print(completion.choices[0].message.content)
+    print(' ')
+    print(' ')
+    print('NOTICE: The output was produced by the large language model GPT 3.5 turbo, so it should only be regarded as a source of inspiration.')
 
-    return completion.choices[0].message.content
+
+
+
+
 
 
 
 
 # ************* Pipeline *************
-def pipeline1(gene_file, metabo_file, design_file, annotation_file, target, cluster_count, aggregation_func=repeat_aggregation_mean):
-    """
-    This function processes gene expression data, performs computations, and returns annotated results.
-
-    Parameters:
-    - gene_file (str): The filename of the gene count data.
-    - metabo_file (str): The filename of the metabolome data.
-    - design_file (str): The filename of the experimental design data.
-    - annotation_file (str): The filename of the gene annotation data.
-    - target (str): The target metabolite for the analysis.
-    - cluster_count (int): The number of clusters for time series clustering.
-    - aggregation_func (function): The function to be used for data aggregation.
-
-    Returns:
-    - result_with_annotation (pd.DataFrame): A pandas DataFrame containing the processed results, with annotations and clustering information.
-    """
-
-    # Read data
-    gene = read_upload(gene_file)
-    metabo = read_upload(metabo_file)
-    design = read_upload(design_file)
-    annotation = read_upload(annotation_file)
-
-    # Process data
-    processed_gene = aggregation_func(gene, design)
-    processed_metabo = aggregation_func(metabo, design)
-
-    # Get target data
-    t = get_target(target, processed_metabo)
-
-    # Compute Granger causality
-    granger = compute_granger(processed_gene, t, 1)
-
-    # Prepare dataframe for fold change calculation
-    df_for_fc(processed_metabo, target, gene, design)
-
-    # Compute fold change
-    fc = fc_comp()
-
-    # Merge and annotate data
-    data = merge_dataframes([granger, fc, annotation])
-    data = annotation_score(data)
-
-    # Compute score and perform clustering
-    result = score(data)
-    cluster = ts_clustering(processed_gene, cluster_count)
-
-    # Merge results and set index
-    result_with_annotation = merge_dataframes([result, annotation, cluster])
-    result_with_annotation.set_index('Rank', inplace=True)
-
-    return result_with_annotation
-
-
-
-
-
-
-
-def pipeline2(gene_file, metabo_file, design_file, annotation_file, target, cluster_count, annotation, aggregation_func=repeat_aggregation_mean):
-    """
-    This function processes gene expression data, performs computations, and returns annotated results.
-
-    Parameters:
-    - gene_file (str): The filename of the gene count data.
-    - metabo_file (str): The filename of the metabolome data.
-    - design_file (str): The filename of the experimental design data.
-    - annotation_file (str): The filename of the gene annotation data.
-    - target (str): The target metabolite for the analysis.
-    - cluster_count (int): The number of clusters for time series clustering.
-    - annotation (bool): A flag to indicate whether to perform annotation or not.
-    - aggregation_func (function): The function to be used for data aggregation.
-
-    Returns:
-    - result_with_annotation (pd.DataFrame): A pandas DataFrame containing the processed results, with annotations and clustering information.
-    """
-
-    # Read data
-    gene = read_upload(gene_file)
-    metabo = read_upload(metabo_file)
-    design = read_upload(design_file)
-    
-    # Process data
-    processed_gene = aggregation_func(gene, design)
-    processed_metabo = aggregation_func(metabo, design)
-
-    # Get target data
-    t = get_target(target, processed_metabo)
-
-    # Compute Granger causality
-    granger = compute_granger(processed_gene, t, 1)
-
-    # Prepare dataframe for fold change calculation
-    df_for_fc(processed_metabo, target, gene, design)
-
-    # Compute fold change
-    fc = fc_comp()
-
-    # Merge and annotate data
-    data = merge_dataframes([granger, fc])
-    
-    # Compute score and perform clustering
-    result = score(data)
-    cluster = ts_clustering(processed_gene, cluster_count)
-    
-    # Merge results and set index
-    if annotation:
-        annotation = read_upload(annotation_file)
-        result_with_annotation = merge_dataframes([result, annotation, cluster])
-        data = merge_dataframes([data, annotation])
-        data = annotation_score(data)
-    else:
-        result_with_annotation = merge_dataframes([result, cluster])
-    result_with_annotation.set_index('Rank', inplace=True)
-    
-    return result_with_annotation
-
-
-
-
-
-
-def pipeline(gene_file, metabo_file, design_file, annotation_file, target, cluster_count, aggregation_func=repeat_aggregation_mean):
+def pipeline(gene_file, metabo_file, design_file, annotation_file, target, cluster_count, aggregation_func=None):
     """
     This function processes gene expression data, performs computations, and returns results.
 
     Parameters:
     - gene_file (str): The filename of the gene count data.
     - metabo_file (str): The filename of the metabolome data.
-    - design_file (str): The filename of the experimental design data.
+    - design_file (str): The filename of the experimental design data (can be None).
     - annotation_file (str): The filename of the gene annotation data (can be None).
     - target (str): The target metabolite for the analysis.
     - cluster_count (int): The number of clusters for time series clustering.
     - aggregation_func (function): The function to be used for data aggregation.
 
     Returns:
-    - result_with_annotation (pd.DataFrame): A pandas DataFrame containing the processed results, with annotations and clustering information if provided.
+    - result (pd.DataFrame): A pandas DataFrame containing the processed results, with annotations and clustering information if provided.
     """
     # Read data
     gene = read_upload(gene_file)
     metabo = read_upload(metabo_file)
-    design = read_upload(design_file)
 
-    # Process data
-    processed_gene = aggregation_func(gene, design)
-    processed_metabo = aggregation_func(metabo, design)
+    if design_file is not None:
+        # If there is a design file
+        design = read_upload(design_file)
 
-    # Get target data
-    t = get_target(target, processed_metabo)
+        # Process data
+        processed_gene = aggregation_func(gene, design)
+        processed_metabo = aggregation_func(metabo, design)
 
-    # Compute Granger causality
-    granger = compute_granger(processed_gene, t, 1)
+        # Get target data
+        t = get_target(target, processed_metabo)
 
-    # Prepare dataframe for fold change calculation
-    df_for_fc(processed_metabo, target, gene, design)
+        # Compute Granger causality
+        granger = compute_granger(processed_gene, t, 1)
 
-    # Compute fold change
-    fc = fc_comp()
+        # Prepare dataframe for fold change calculation
+        df_for_fc(processed_metabo, target, gene, design)
 
-    # Merge data
-    data = merge_dataframes([granger, fc])
-    
+        # Compute fold change
+        fc = fc_comp()
+
+        # Merge data
+        data = merge_dataframes([granger, fc])
+
+    else:
+        # If there is no design file
+        t = get_target(target, metabo)
+        noontide = find_noontide(metabo, target)
+        granger = compute_granger(gene, t)
+
+        # Compute fold change
+        fc = no_repeat_fc(gene, noontide)
+        data = merge_dataframes([granger, fc])
+        
     # Compute score
     result = score(data)
 
     # Perform clustering
-    cluster = ts_clustering(processed_gene, cluster_count)
-    
+    cluster = ts_clustering(gene, cluster_count)
+
     if annotation_file is not None:
+        # If there is an annotation file
         annotation = read_upload(annotation_file)
         data = merge_dataframes([data, annotation])
         data = annotation_score(data)
-        result_with_annotation = merge_dataframes([result, annotation, cluster])
+        result = merge_dataframes([result, annotation, cluster])
     else:
-        result_with_annotation = merge_dataframes([result, cluster])
-    result_with_annotation.set_index('Rank', inplace=True)
+        result = merge_dataframes([result, cluster])
 
-    return result_with_annotation
+    result.set_index('Rank', inplace=True)
+
+    return result
 
 
 
