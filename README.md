@@ -11,6 +11,8 @@ And CAT Bridge is **integrated with GPT 3.5 Turbo** integration to help users di
 
 At the heart of CAT Bridge lies a data-driven algorithm, theoretically enabling its application across a wide spectrum of multi-omics data showcasing causal relationships. However, so far, we've tested this only between metabolome-transcriptome and metabolome-metabolome interactions.
 
+![Pipeline](https://github.com/Bowen999/catbridge/blob/main/figures/pipeline.png)
+
 ## Installation
 Python dependencies can be installed using pip (from the Unix terminal)
 ```pip install catbridge```
