@@ -14,7 +14,7 @@ At the heart of CAT Bridge lies a data-driven algorithm, theoretically enabling 
 ![Pipeline](https://github.com/Bowen999/catbridge/blob/main/figures/pipeline.png)
 
 ## Installation
-Python dependencies can be installed using pip (from the Unix terminal)
+Python dependencies can be installed using pip (from the Unix terminal)   
 ```pip install catbridge```
 
 ## Contact
