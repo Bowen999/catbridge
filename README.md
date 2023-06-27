@@ -20,6 +20,7 @@ Dependencies can be installed using pip (from the Unix terminal)
 ```
 # Python dependencies
 pip install pandas numpy sklearn matplotlib seaborn bioinfokit networkx scipy statsmodels tslearn openai
+
 # R dependencies  
 R -e 'install.packages("BiocManager"); BiocManager::install("DESeq2"); install.packages("readr")'
 ```
