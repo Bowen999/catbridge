@@ -14,7 +14,11 @@ At the heart of CAT Bridge lies a data-driven algorithm, theoretically enabling 
 ![Pipeline](https://github.com/Bowen999/catbridge/blob/main/figures/pipeline.png)
 
 ## Installation
+### dependencies
 Python dependencies can be installed using pip (from the Unix terminal)   
+```!pip install pandas numpy sklearn matplotlib seaborn bioinfokit networkx scipy statsmodels tslearn openai```
+
+### CAT Bridge
 ```pip install catbridge```
 
 ## Contact
