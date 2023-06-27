@@ -17,6 +17,8 @@ At the heart of CAT Bridge lies a data-driven algorithm, theoretically enabling 
 ### dependencies
 Python dependencies can be installed using pip (from the Unix terminal)   
 ```!pip install pandas numpy sklearn matplotlib seaborn bioinfokit networkx scipy statsmodels tslearn openai```
+R dependencies
+```R -e 'install.packages("BiocManager"); BiocManager::install("DESeq2"); install.packages("readr")'```
 
 ### CAT Bridge
 ```pip install catbridge```
