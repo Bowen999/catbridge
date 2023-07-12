@@ -28,6 +28,10 @@ R -e 'install.packages("BiocManager"); BiocManager::install("DESeq2"); install.p
 ### CAT Bridge
 ```pip install catbridge```
 
+
+### Know More
+don't konw what is **Granger Causality Test**? look at this video: [STATISTICS I Time Series I Granger Causality Test I Intuition and Example](https://www.youtube.com/watch?v=6dOnNNxRJuY)
+
 ## Contact
 The package is developed and maintained by Bowen Yang (by8@ualberta.ca). Please, reach us for problems, comments or suggestions.
 
