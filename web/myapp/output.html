@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CAT Bridge</title>
+  <link rel="shortcut icon" href="../../docs-assets/ico/favicon.png"><link href="assets/css/bootstrap.css" rel="stylesheet"><link href="assets/css/main.css" rel="stylesheet">
+  <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script><script src="assets/js/hover.zoom.js"></script><script src="assets/js/hover.zoom.conf.js"></script>
+
+  <style>
+    .div-parent {
+        display: flex;
+        justify-content: space-between;
+    }
+    .div-child {
+        flex: 1;
+        text-align: center;
+    }
+    .div-child h2 {
+      color: rgb(96, 96, 96);
+    }
+    .line-image {
+        width: 100%;
+        height: auto;
+    }
+    .pca-image {
+        width: 100%;
+        height: auto;
+    }
+    .padded {
+      padding: 0 20px;
+    }
+    .padded h2 {
+      color: rgb(96, 96, 96);
+    }
+    .space-bottom {
+        margin-bottom: 20px;
+    }
+  </style>
+
+
+</head>
+
+<body>
+
+  <div class="navbar navbar-inverse navbar-static-top" style="background-color: #4a54b2; height: 100px;">
+    <div class="container">
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="index.html" style="padding-top: 0px;">CAT Bridge</a>
+      </div>
+      <div class="navbar-collapse collapse">
+        <ul class="nav navbar-nav navbar-right">
+          <li><a href="" style="padding-top: 0px;">Home</a></li>
+          <li><a href="" style="padding-top: 0px;">Function</a></li>
+          <li><a href="" style="padding-top: 0px;">Tutorial</a></li>
+          <li><a href="" style="padding-top: 0px;">Contact</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="padded">
+    <h1><font color="black">Analysis Results</font></h1>
+  </div>
+
+  <div class="padded">
+    <h2>Result table</h2>
+    <img class="table" src="result/plot/table.svg" alt="table">
+  </div>
+  
+  <div class="padded">
+    <img class="line-image" src="result/plot/result.svg" alt="result">
+  </div>
+
+  <div class="padded">
+    <h2>Line plot of target feature</h2>
+    <img class="line-image" src="result/plot/line.svg" alt="Line Plot">
+  </div>
+
+  <div class="div-parent padded">
+    <div class="div-child">
+        <h2>PCA of transcriptomics</h2>
+        <img class="pca-image" src="result/plot/g_pca.svg" alt="PCA of transcriptomics">
+    </div>
+    <div class="div-child">
+        <h2>PCA of metabolomics</h2>
+        <img class="pca-image" src="result/plot/m_pca.svg" alt="PCA of metabolomics">
+    </div>
+    <div class="div-child">
+        <h2>Overall PCA</h2>
+        <img class="pca-image" src="result/plot/merged_pca.svg" alt="Overall PCA">
+    </div>
+  </div>
+
+  <div class="div-parent padded">
+    <div class="div-child">
+        <h2>Heatmap of transcriptomics</h2>
+        <img class="pca-image" src="result/plot/g_heatmap.svg" alt="Heatmap of transcriptomics">
+    </div>
+    <div class="div-child">
+        <h2>Heatmap of metabolomics</h2>
+        <img class="pca-image" src="result/plot/m_heatmap.svg" alt="Heatmap of metabolomics">
+    </div>
+  </div>
+
+  <div class="div-parent padded">
+    <div class="div-child">
+        <h2>Importance features of transcriptomics</h2>
+        <img class="pca-image" src="result/plot/g_imp.svg" alt="Importance features of transcriptomics">
+    </div>
+    <div class="div-child">
+        <h2>Importance features of metabolomics</h2>
+        <img class="pca-image" src="result/plot/m_imp.svg" alt="Importance features of transcriptomics">
+    </div>
+  </div>
+
+  <div class="div-parent padded">
+    <div class="div-child">
+        <h2>Volcano plot (Peak vs Decline)</h2>
+        <img class="pca-image" src="result/plot/volcano.png" alt="volcano">
+    </div>
+    <div class="div-child">
+        <h2>Similar network of target</h2>
+        <img class="pca-image" src="result/plot/network.svg" alt="Similar network of target">
+    </div>
+  </div>
+  
+  <div class="space-bottom"></div>
+
+</body>
+
+<div id="footer", style="background-color: #4a54b2; height: 100px;">
+  <div class="container">
+    <a href="http://www.guo-lab.site/index.html" style="color: white">Powered by Guo Lab</a>
+    <div class="row">
+    <!-- <div class="col-lg-4"><a href="http://www.pku-iaas.edu.cn"><img src="assets/img/logo1.png"></a></div>
+    <div class="col-lg-4"><a href="http://www.pku-iaas.edu.cn"><img src="assets/img/logo2.png"></a></div>
+    <div class="col-lg-4"><a href="https://tripal.info"><img src="assets/img/logo3.png" style="width:50%;"></a></div> -->
+    </div>
+  </div>
+  </div>	  
+
+  
+
+  <!-- Bootstrap core JavaScript
+  ================================================== -->
+  <!-- Placed at the end of the document so the pages load faster -->
+  <script src="assets/js/bootstrap.min.js"></script>
+<script src="file-uploader.js"></script>
+</body>
+</html>
+
+
+
+</html>
