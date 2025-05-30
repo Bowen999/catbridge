@@ -1,96 +1,252 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Day1 东京塔</title>
-  <link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CAT-Bridge Status Update</title>
+    <style>
+        :root {
+            --primary-color: #006abc; /* Cooler Blue */
+            --secondary-color: #263238; /* Dark Blue Grey */
+            --text-color: #eceff1; /* Light Grey for dark backgrounds */
+            --background-color: #1e1e1e; /* Very Dark Grey/Almost Black */
+            --container-background: #2a2a2a; /* Darker container */
+            --accent-color: #2ecc71; /* New Green Accent */
+            --font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            --border-radius: 10px;
+            --box-shadow: 0 12px 25px rgba(0, 0, 0, 0.3), 0 8px 10px rgba(0, 0, 0, 0.2);
+            --primary-darker-shade: #004376; /* Darker shade for the new primary blue */
+        }
+
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
+
+        body {
+            font-family: var(--font-family);
+            background: linear-gradient(135deg, var(--background-color) 0%, #2c3e50 100%);
+            color: var(--text-color);
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            line-height: 1.7;
+            font-size: 16px;
+            box-sizing: border-box;
+        }
+
+        .container {
+            background-color: var(--container-background);
+            padding: 45px 55px;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            text-align: center;
+            max-width: 650px;
+            width: 100%;
+            border-top: 6px solid var(--primary-color); /* Uses primary color */
+            animation: slideInUp 0.8s ease-out forwards;
+            opacity: 0;
+        }
+
+        @keyframes slideInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .icon-wrapper {
+            background-color: var(--primary-color); /* Uses primary color */
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: -85px auto 25px auto; /* Pulls icon partially outside the box */
+            box-shadow: 0 6px 12px rgba(0, 106, 188, 0.4); /* Adjusted shadow for primary color */
+            border: 4px solid var(--container-background);
+            position: relative; /* Ensures it's above the container's top border */
+        }
+
+        .icon-wrapper .fas {
+            font-size: 2.5em;
+            color: #ffffff;
+        }
+
+        .logo {
+            font-size: 2.8em;
+            font-weight: 700;
+            color: var(--primary-color); /* Main part of logo uses primary color (blue) */
+            margin-bottom: 10px;
+            letter-spacing: 0.5px;
+        }
+
+        .logo span {
+            color: var(--accent-color); /* "Bridge" part of logo uses new green accent */
+            font-weight: 700;
+        }
+
+        h1 {
+            color: var(--text-color);
+            font-size: 1.9em;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+
+        p {
+            font-size: 1.1em;
+            margin-bottom: 20px;
+            color: #b0bec5; /* Lighter grey for paragraph text */
+        }
+
+        .highlight {
+            color: var(--accent-color); /* Highlighted text uses new green accent */
+            font-weight: 600;
+        }
+
+        .button-container {
+            margin-top: 35px;
+            margin-bottom: 20px; /* Added margin for spacing before tutorial link */
+        }
+
+        .button {
+            background: linear-gradient(145deg, var(--primary-color), var(--primary-darker-shade)); /* Gradient with primary and its darker shade */
+            color: #ffffff;
+            padding: 16px 35px;
+            text-decoration: none;
+            border-radius: var(--border-radius);
+            font-size: 1.15em;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            display: inline-flex; /* For aligning icon and text */
+            align-items: center;
+            gap: 10px; /* Space between icon and text */
+            box-shadow: 0 5px 15px rgba(0, 106, 188, 0.3); /* Adjusted shadow for primary color */
+            border: none;
+        }
+
+        .button:hover {
+            background: linear-gradient(145deg, var(--primary-darker-shade), var(--primary-color)); /* Reversed gradient on hover */
+            transform: translateY(-3px) scale(1.03);
+            box-shadow: 0 8px 20px rgba(0, 106, 188, 0.5); /* Adjusted shadow for primary color */
+        }
+
+        .button .fab {
+            font-size: 1.2em;
+        }
+        
+        .tutorial-link-container p {
+            margin-top: 25px; /* Space above the tutorial link */
+            font-size: 1em;
+        }
+
+        .tutorial-link-container a {
+            color: var(--accent-color);
+            text-decoration: none;
+            font-weight: 600;
+            border-bottom: 1px dashed var(--accent-color);
+            padding-bottom: 2px;
+            transition: color 0.3s ease, border-bottom-color 0.3s ease;
+        }
+
+        .tutorial-link-container a:hover {
+            color: var(--primary-color);
+            border-bottom-color: var(--primary-color);
+        }
+
+
+        footer {
+            margin-top: 40px;
+            font-size: 0.95em;
+            color: #78909c; /* Muted grey for footer */
+        }
+
+        footer a {
+            color: var(--primary-color); /* Footer links use primary color */
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        footer a:hover {
+            color: var(--accent-color); /* Footer link hover uses new green accent */
+            text-decoration: underline;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .container {
+                padding: 35px 30px;
+                margin-top: 60px; /* Adjust for icon overlap */
+            }
+            .icon-wrapper {
+                width: 70px;
+                height: 70px;
+                margin: -75px auto 20px auto;
+            }
+            .icon-wrapper .fas {
+                font-size: 2em;
+            }
+            .logo {
+                font-size: 2.4em;
+            }
+            h1 {
+                font-size: 1.6em;
+            }
+            p {
+                font-size: 1em;
+            }
+            .button {
+                padding: 14px 28px;
+                font-size: 1.05em;
+            }
+        }
+         @media (max-width: 480px) {
+            .container {
+                padding: 30px 20px;
+            }
+             h1 {
+                font-size: 1.4em;
+            }
+            .logo {
+                font-size: 2em;
+            }
+         }
+
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 <body>
-  <button id="font-size-button">A</button>
-  <nav>
-<ul>
-<li><a href="4.30.html">4.30</a></li>
-<li><a href="5.1.html">5.1</a></li>
-<li><a href="5.2.html">5.2</a></li>
-<li><a href="5.3.html">5.3</a></li>
-<li><a href="5.4.html">5.4</a></li>
-<li><a href="5.5.html">5.5</a></li>
-</ul>
-</nav>
-  <h1 style="font-size: var(--base-font-size)">Day1 东京塔</h1>
-  <div class="table-wrapper">
-    <table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th>1</th>
-      <th>项目</th>
-      <th>时间</th>
-      <th>人均价格</th>
-      <th>交通</th>
-      <th>内容</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th></th>
-      <td>抵达成田机场</td>
-      <td>约15:00</td>
-      <td>NaN</td>
-      <td>下飞机绑定苹果钱包西瓜卡；T3先坐机场接驳车到T1；T1负一楼C台JR售票处购买实体卡或者直接购票</td>
-      <td>NaN</td>
-    </tr>
-    <tr>
-      <th></th>
-      <td>成田T1--酒店</td>
-      <td>约17:30</td>
-      <td>JP¥1,466</td>
-      <td>京成成田SKYACCESS 1h10min --押上（无需换乘）--三田A4出站口</td>
-      <td>skyaccess每40min一班，出境后坐扶梯到B1轨道交通换乘，<br>沿着铁道方向走，沿着蓝色圈圈【KS】走（如无西瓜卡，在此处买票），<br>看到蓝色标志牌【京成线 成田机场】再往前走到橙色【access特快】，<br>刷西瓜卡进站。</td>
-    </tr>
-    <tr>
-      <th></th>
-      <td>晚餐</td>
-      <td>18:30-20:00</td>
-      <td>NaN</td>
-      <td>酒店至餐厅均步行可达</td>
-      <td>肉酒場 ケナシバ ，羊肉料理，tabelog 3.42分，人均JP¥4,000~¥4,999；<br>古民家の宴，鸡肉料理，tabelog 3.37分，人均JP¥3,000~¥3,999；<br>馬並み家 三田本店，马肉料理，tabelog 3.40分，人均JP¥4,000~¥4,999</td>
-    </tr>
-    <tr>
-      <th></th>
-      <td>东京塔</td>
-      <td>20:00-21:30</td>
-      <td>NaN</td>
-      <td>步行</td>
-      <td>打卡点：<br>1:北海道ワイン㈱ 東京営業所<br>2:赤羽桥站 E21出口，出来就能看到东京塔过对面马路能拍到路牌和东京塔<br>3:赤羽桥站牌过马路，可以直面东京塔。<br>4:王子芝公園公园长椅，3拍完右手边就是<br>5:東京 芝 豆腐屋UKAI<br>6:東京 芝 豆腐屋UKAI右手边公路</td>
-    </tr>
-    <tr>
-      <th></th>
-      <td>购物</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>汇率优势排列：微信、支付宝、银行卡，其中微信最低，<br>小程序搜索“微信支付全球有礼”刷满6笔后都是最优汇率，<br>可先在超市刷6笔，6天内有效。</td>
-    </tr>
-  </tbody>
-</table>
-  </div>
-  <script>
-(function(){
-    const btn = document.getElementById('font-size-button');
-    const sizes = [12, 14, 16, 18, 20];  // pixel sizes for A--, A-, A, A+, A++
-    const labels = ['A--', 'A-', 'A', 'A+', 'A++'];
-    let index = 2; // start at 'A' (16px)
-    btn.textContent = labels[index];
-    btn.addEventListener('click', () => {
-        index = (index + 1) % sizes.length;
-        document.documentElement.style.setProperty(
-            '--base-font-size',
-            sizes[index] + 'px'
-        );
-        btn.textContent = labels[index];
-    });
-})();
-</script>
+    <div class="container">
+        <div class="icon-wrapper">
+            <i class="fas fa-sync-alt"></i> </div>
+        <div class="logo">CAT<span>-Bridge</span></div> <h1>Important Update: Web Version Enhancements</h1>
+        <p>
+            We're excited to announce that the <strong class="highlight">CAT-Bridge web server</strong> is currently undergoing significant enhancements to improve its performance and introduce new features. We appreciate your patience during this upgrade process.
+        </p>
+        <p>
+            While the web version is being updated, we encourage you to utilize the robust <strong class="highlight">Python package</strong> or the <strong class="highlight">standalone client version</strong> for full access to CAT-Bridge's capabilities, including the AI-powered 'Yuan Fang' analysis tool.
+        </p>
+        <div class="button-container">
+            <a href="https://github.com/Bowen999/CAT-Bridge" class="button" target="_blank" rel="noopener noreferrer">
+                <i class="fab fa-github"></i> Access on GitHub
+            </a>
+        </div>
+        <div class="tutorial-link-container">
+            <p>
+                Need help getting started? Check out our <a href="https://www.catbridge.work/tutorial.html" target="_blank" rel="noopener noreferrer">CAT-Bridge Tutorial</a>.
+            </p>
+        </div>
+        <footer>
+            <p>
+                Thank you for your continued support of CAT-Bridge. For any questions, please refer to the <a href="https://github.com/Bowen999/CAT-Bridge/issues" target="_blank" rel="noopener noreferrer">GitHub issues</a> page.
+            </p>
+            <p>&copy; The CAT-Bridge Development Team</p>
+        </footer>
+    </div>
 </body>
 </html>

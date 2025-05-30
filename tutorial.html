@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CAT-Bridge Tutorial</title>
+    <style>
+        :root {
+            --primary-color: #006abc; /* Blue */
+            --text-color: #eceff1; /* Light Grey / White */
+            --text-secondary-color: #b0bec5; /* Softer white for paragraphs */
+            --background-color: #1e1e1e; /* Very Dark Grey/Almost Black */
+            --container-background: #2a2a2a; /* Darker container */
+            --border-color: #444;
+            --font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            --border-radius: 10px;
+            --box-shadow: 0 12px 25px rgba(0, 0, 0, 0.3), 0 8px 10px rgba(0, 0, 0, 0.2);
+            --code-background: #1a1a1a; /* Dark background for code blocks */
+            --code-text-color: var(--text-color);
+            --link-color: var(--primary-color);
+            --link-hover-color: #64b5f6; /* Lighter blue for link hover */
+        }
+
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
+
+        body {
+            font-family: var(--font-family);
+            background-color: var(--background-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 0;
+            line-height: 1.7;
+            font-size: 16px;
+        }
+
+        .tutorial-header {
+            background-color: var(--primary-color);
+            color: white; /* Header text is white */
+            padding: 50px 20px;
+            text-align: center;
+        }
+
+        .tutorial-header h1 {
+            margin: 0;
+            font-size: 2.8em;
+            font-weight: 700;
+        }
+        .tutorial-header .logo-main {
+            color: white; /* "CAT" is white */
+        }
+        .tutorial-header .logo-span {
+            color: #e3f2fd; /* "-Bridge" is a very light blue/off-white */
+            font-weight: normal;
+        }
+
+        .tutorial-container {
+            max-width: 900px;
+            margin: 40px auto;
+            padding: 20px 30px;
+            background-color: var(--container-background);
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+        }
+
+        .tutorial-section {
+            margin-bottom: 40px;
+            padding-bottom: 30px;
+            border-bottom: 1px solid var(--border-color);
+        }
+        .tutorial-section:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+
+        .tutorial-section h2 {
+            font-size: 2em;
+            color: var(--primary-color); /* Section titles are blue */
+            margin-top: 0;
+            margin-bottom: 20px;
+            scroll-margin-top: 80px; /* Offset for fixed header + some breathing room */
+        }
+        
+        .tutorial-section h3 {
+            font-size: 1.6em;
+            color: var(--primary-color); /* Sub-section titles (like in FAQ) are blue */
+            margin-top: 25px;
+            margin-bottom: 15px;
+        }
+
+        .tutorial-section p, .tutorial-section ul li {
+            font-size: 1.1em;
+            color: var(--text-secondary-color); /* Paragraph text is softer white */
+            margin-bottom: 15px;
+        }
+        
+        .tutorial-section ul {
+            padding-left: 20px;
+            list-style: disc;
+        }
+         .tutorial-section ul p { /* For paragraphs inside list items, if any */
+            margin-bottom: 5px;
+        }
+
+
+        .tutorial-section strong {
+            color: var(--primary-color); /* Strong emphasis is blue */
+            font-weight: 600;
+        }
+
+        .tutorial-section a {
+            color: var(--link-color); /* Links are blue */
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .tutorial-section a:hover {
+            color: var(--link-hover-color); /* Link hover is lighter blue */
+            text-decoration: underline;
+        }
+
+        .tutorial-section .italic-gray { /* This class was in original, might not be used now */
+            font-style: italic;
+            color: #8892b0; 
+        }
+
+        .image-container {
+            margin: 20px 0;
+            text-align: center;
+        }
+
+        .image-container img {
+            max-width: 100%;
+            height: auto;
+            border-radius: var(--border-radius);
+            background-color: #333; 
+            border: 1px solid var(--border-color);
+        }
+        
+        .placeholder-text {
+            display: block;
+            color: #aaa;
+            font-style: italic;
+            margin-top: 5px;
+        }
+
+        .tutorial-section code {
+            background-color: var(--code-background);
+            color: var(--code-text-color); /* Code text is white/light grey */
+            padding: 3px 6px;
+            border-radius: 4px;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 0.95em;
+        }
+        
+        .tutorial-section p > code { /* For inline code within paragraphs */
+             word-break: break-all;
+        }
+
+        /* For block code if needed, though the provided HTML uses p > code */
+        .tutorial-section pre {
+            background-color: var(--code-background);
+            color: var(--code-text-color);
+            padding: 15px;
+            border-radius: var(--border-radius);
+            overflow-x: auto;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 0.95em;
+            margin-bottom: 15px;
+        }
+        .tutorial-section pre code {
+            padding: 0;
+            background-color: transparent;
+        }
+
+
+        .nav-sidebar {
+            position: fixed;
+            left: 20px;
+            top: 160px; /* Adjusted based on header height */
+            width: 220px;
+            max-height: calc(100vh - 180px); /* Prevent overlap with footer */
+            overflow-y: auto;
+            background-color: var(--container-background);
+            padding: 20px;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+        }
+
+        .nav-sidebar h3 {
+            color: var(--primary-color); /* Sidebar title is blue */
+            font-size: 1.4em;
+            margin-top: 0;
+            margin-bottom: 15px;
+        }
+
+        .nav-sidebar ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .nav-sidebar li a {
+            display: block;
+            padding: 10px 0;
+            color: var(--text-color); /* Sidebar links are white */
+            text-decoration: none;
+            font-size: 1em;
+            transition: color 0.3s ease;
+        }
+
+        .nav-sidebar li a:hover {
+            color: var(--link-hover-color); /* Sidebar link hover is lighter blue */
+        }
+        
+        .tutorial-content-area {
+             margin-left: 260px; /* Space for the sidebar */
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 1200px) {
+            .tutorial-content-area {
+                margin-left: 0;
+            }
+            .nav-sidebar {
+                position: static; 
+                width: auto;
+                margin: 0 auto 30px auto; 
+                max-width: 900px; 
+                max-height: none; /* Remove height restriction */
+                overflow-y: visible;
+            }
+             .tutorial-container {
+                margin: 20px auto;
+             }
+        }
+
+        @media (max-width: 768px) {
+            .tutorial-header h1 {
+                font-size: 2.2em;
+            }
+            .tutorial-section h2 {
+                font-size: 1.8em;
+            }
+             .tutorial-section h3 {
+                font-size: 1.4em;
+            }
+            .tutorial-section p, .tutorial-section ul li {
+                font-size: 1em;
+            }
+             .nav-sidebar {
+                padding: 15px;
+            }
+            .nav-sidebar h3 {
+                font-size: 1.2em;
+            }
+            .nav-sidebar li a {
+                font-size: 0.95em;
+            }
+        }
+         @media (max-width: 480px) {
+            .tutorial-header {
+                padding: 30px 15px;
+            }
+            .tutorial-header h1 {
+                font-size: 1.8em;
+            }
+            .tutorial-container {
+                padding: 15px;
+            }
+            .tutorial-section h2 {
+                font-size: 1.6em;
+            }
+             .tutorial-section h3 {
+                font-size: 1.3em;
+            }
+         }
+
+    </style>
+</head>
+<body>
+
+    <header class="tutorial-header">
+        <h1><span class="logo-main">CAT</span><span class="logo-span">-Bridge</span> Tutorial</h1>
+    </header>
+
+    <div class="nav-sidebar">
+        <h3>Navigation</h3>
+        <ul>
+            <li><a href="#user-guide">User Guide</a></li>
+            <li><a href="#data-type-and-input">Data Type and Input</a></li>
+            <li><a href="#download">Download</a></li>
+            <li><a href="#faq">FAQ</a></li>
+            <li><a href="#updates">Updates</a></li>
+        </ul>
+    </div>
+    
+    <div class="tutorial-content-area">
+        <main class="tutorial-container">
+            <section id="user-guide" class="tutorial-section">
+                <h2>User Guide</h2>
+                <p>For programmers, we <strong>highly recommend using the Python package version</strong>, which offers independence from server resource limitations, more functions, and better pre-processing for files. See <strong>Download section</strong> for details.</p>
+                <p>For the web version, we suggest using either <strong>Firefox</strong> or <strong>Chrome</strong> as there may be compatibility issues with other browsers.</p>
+            </section>
+
+            <section id="data-type-and-input" class="tutorial-section">
+                <h2>Data Type and Input</h2>
+                <p>All four uploaded files should be in tsv/csv format, with transcriptome and metabolome being mandatory.</p>
+                <p>Annotation and Study Design are optional (If there are no biological repetitions, please do not upload Study Design).</p>
+                <p>Annotations for non-model organisms are usually obtained through homologous annotation. Don't know how to do? Try <a href="http://eggnog-mapper.embl.de" target="_blank" rel="noopener noreferrer">eggNOG-mapper</a> or <a href="https://dbsloan.github.io/TS2019/exercises/local_blast.html" target="_blank" rel="noopener noreferrer">BLAST</a>?</p>
+                <div class="image-container">
+                    <img src="https://placehold.co/800x300/333333/cccccc?text=Input+Format+Example+1+(input1.svg)" alt="Input format example 1">
+                    <span class="placeholder-text">Image: Input Format Example 1 (Placeholder for input1.svg)</span>
+                </div>
+                <div class="image-container">
+                    <img src="https://placehold.co/800x200/333333/cccccc?text=Input+Format+Example+2+(input2.svg)" alt="Input format example 2">
+                     <span class="placeholder-text">Image: Input Format Example 2 (Placeholder for input2.svg)</span>
+                </div>
+                <p><strong>Targets</strong> refer to metabolites of interest and should be present in the metabolome file.<br><strong>Cluster Number</strong> refers to how many categories the genes will be clustered into.<br><strong>Method</strong> is used for dealing with biological repetitions (it is not required if there are no biological repetitions).</p>
+            </section>
+            
+            <section id="download" class="tutorial-section">
+                <h2>Download</h2>
+                <p>CAT Bridge offers more than just a web app; it also provides a <strong>standalone application</strong> and a <strong>Python library</strong>.</p>
+                
+                <h3>Python library</h3>
+                <p>For the Python library, you can easily download it using either:</p>
+                <p><code>pip install catbridge</code></p>
+                <p>or</p>
+                <p><code>conda install catbridge</code></p>
+                <p>The source code can be found at <a href="https://github.com/Bowen999/CAT-Bridge" target="_blank" rel="noopener noreferrer">GitHub</a> or <a href="https://pypi.org/project/catbridge/" target="_blank" rel="noopener noreferrer">PyPi</a>.</p>
+                <p>To help you get started, we provide a <a href="https://github.com/Bowen999/CAT-Bridge/blob/main/demo/case%20study.ipynb" target="_blank" rel="noopener noreferrer">demo</a> available for your reference.</p>
+                
+                <h3>Standalone application</h3>
+                <p>If you prefer the standalone application, you can download it by using the following command:</p>
+                <p><code>git clone https://github.com/Bowen999/CAT-Bridge/tree/main/client</code></p>
+                <p>Or go to <a href="https://github.com/Bowen999/CAT-Bridge/tree/main/client" target="_blank" rel="noopener noreferrer">GitHub</a> to download it.</p>
+                <p>After downloading, you can launch it using the command:</p>
+                <p><code>python run.py</code></p>
+            </section>
+
+            <section id="faq" class="tutorial-section">
+                <h2>FAQ</h2>
+                <h3 id="faq-methods">1. What are the methods? Which one should I choose?</h3>
+                <p>We have integrated seven distinct statistical methods.<br>Including Convergent Cross Mapping (CCM) and Granger Causality (Granger) for computing cause-and-effect relationships. As well as Canonical Correlation Analysis (CCA), Dynamic-Time-Warping (DTW), Cross-Correlation Function (CCF), Spearman Correlation Coefficient (Spearman), and Pearson Correlation Coefficient (Pearson) for calculating similarity.</p>
+                <p>Here are some useful links to help you understand these methods and choose the most suitable one for your experimental design:</p>
+                <ul>
+                    <li>CCM: <a href="https://phdinds-aim.github.io/time_series_handbook/06_ConvergentCrossMappingandSugiharaCausality/ccm_sugihara.html" target="_blank" rel="noopener noreferrer">Convergent Cross Mapping</a>, 
+                    <a href="https://www.youtube.com/watch?v=NrFdIz-D2yM" target="_blank" rel="noopener noreferrer">State Space Reconstruction: Convergent Cross Mapping Visualization</a>, <a href="https://elifesciences.org/articles/72518" target="_blank" rel="noopener noreferrer">Data-driven causal analysis of observational biological time series</a></li>
+                    <li>Granger: <a href="https://towardsdatascience.com/a-quick-introduction-on-granger-causality-testing-for-time-series-analysis-7113dc9420d2" target="_blank" rel="noopener noreferrer">A Quick Introduction On Granger Causality Testing For Time Series Analysis</a></li>
+                    <li>CCA: <a href="https://online.stat.psu.edu/stat505/book/export/html/682" target="_blank" rel="noopener noreferrer">Canonical Correlation Analysis</a></li>
+                    <li>DTW: <a href="https://builtin.com/data-science/dynamic-time-warping" target="_blank" rel="noopener noreferrer">An Introduction to Dynamic Time Warping</a></li>
+                    <li>CCF: <a href="https://scicoding.com/practical-guide-to-cross-correlation/" target="_blank" rel="noopener noreferrer">Practical Guide to Cross-Correlation</a></li>
+                    <li>Spearman & Pearson: <a href="https://www.surveymonkey.com/market-research/resources/pearson-correlation-vs-spearman-correlation/" target="_blank" rel="noopener noreferrer">Pearson correlation vs. Spearman correlation methods</a></li>
+                </ul>
+                <p><strong>If your data is in the form of time series, we recommend using CCM (Convergent Cross Mapping).</strong></p>
+
+                <h3 id="faq-annotation">2. How to obtain a gene functional annotation file?</h3>
+                <p>You can obtain this file through homology annotation tools or functional prediction tools.<br>For instance, you can try tools like <a href="http://eggnog-mapper.embl.de" target="_blank" rel="noopener noreferrer">eggNOG-mapper</a> or <a href="https://ftp.ncbi.nlm.nih.gov/blast/executables/blast+/LATEST/" target="_blank" rel="noopener noreferrer">BLAST+</a>.<br>We are providing a <a href="https://github.com/Bowen999/CAT-Bridge/blob/main/demo/pepper/Cchinense_longest_pep.fa" target="_blank" rel="noopener noreferrer">sequence files</a> of chili peppers for you to try out.</p>
+
+                <h3 id="faq-size-limit">3. Files size limitation?</h3>
+                <p>Yes. But we can support regular data sizes, such as 7 time points, each with 3 replicates (in other words, 21 samples), and the detection of 50,000 genes and 1,000 compounds.</p>
+                <p>If your data is exceptionally large, you can still perform the analysis by using the standalone application or importing the Python package.</p>
+                
+                <h3 id="faq-yuan-fang">4. How to use the Yuan Fang (AI Agent) to gain insights from analysis results based on knowledge?</h3>
+                <p>Yuan Fang operates on the OpenAI API, which requires an API Key for access <a href='https://platform.openai.com/docs/quickstart' target="_blank" rel="noopener noreferrer">click here for details on how to obtain one</a>. To prevent the leakage of the API Key due to network security concerns, this functionality is not available on our web version. Instead, please use our Python Package to access this feature. We are also in the process of integrating this functionality into our client-side application.</p>
+
+                <h3 id="faq-other-issues">5. Other issues</h3>
+                <p>If you have any other questions, encounter errors, or any suggestions, please feel free to contact me at by172@georgetown.edu.</p>
+            </section>
+
+            <section id="updates" class="tutorial-section">
+                <h2>Updates</h2>
+                <p>The standalone program provides version information of Python modules, and a Docker image. <strong>Jul.29.2024</strong></p>
+                <p>The website has been switched to HTTPS. <strong>Jul.18.2024</strong></p>
+                <p>Fixed the issue that the example files could not be found. <strong>May.09.2024</strong></p>
+            </section>
+        </main>
+    </div>
+    
+    <script>
+        // Smooth scroll for anchor links
+        document.querySelectorAll('.nav-sidebar a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href');
+                const targetElement = document.querySelector(targetId);
+                if (targetElement) {
+                    // Calculate position considering potential fixed header and some offset
+                    const headerOffset = 20; // Extra offset for better positioning below header/top of viewport
+                    const elementPosition = targetElement.getBoundingClientRect().top;
+                    const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+    
+                    window.scrollTo({
+                        top: offsetPosition,
+                        behavior: "smooth"
+                    });
+                }
+            });
+        });
+    </script>
+
+</body>
+</html>
