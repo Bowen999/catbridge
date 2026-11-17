@@ -48,7 +48,7 @@
   /* ---- worker ------------------------------------------------------------------------------------------ */
   function newWorker() {
     if (S.worker) S.worker.terminate();
-    const w = new Worker('worker.js?v=7', { type: 'module' });
+    const w = new Worker('worker.js?v=9', { type: 'module' });
     S.worker = w;
     S.baseReady = false; S.deseqReady = false; S.prepError = null; S.prepDetail = '';
     S.steps = {};
@@ -496,7 +496,7 @@
     R.head.forEach((d, i) => {
       const on = R.sort.key === d.key;
       ths[i].setAttribute('aria-sort', on ? (R.sort.dir === 1 ? 'ascending' : 'descending') : 'none');
-      ths[i].querySelector('.arrow').textContent = on ? (R.sort.dir === 1 ? '▲' : '▼') : '';
+      ths[i].querySelector('.arrow').innerHTML = on ? '<svg class="ico ico-sm" viewBox="0 0 24 24"><use href="#i-arrow-' + (R.sort.dir === 1 ? 'up' : 'down') + '"/></svg>' : '';
     });
   }
   function applyView() {

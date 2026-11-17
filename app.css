@@ -62,6 +62,9 @@ body {
 }
 main { flex: 1 0 auto; padding-bottom: var(--s7); }
 img { max-width: 100%; }
+/* icons: 24-unit grid, one stroke width, round caps and joins, colour from the text (see the sprite in index.html) */
+.ico { display: inline-block; flex: none; fill: none; stroke: currentColor; stroke-width: 1.75; stroke-linecap: round; stroke-linejoin: round; }
+.ico-sm { width: 16px; height: 16px; stroke-width: 2.25; }
 a { color: var(--primary); text-underline-offset: 2px; }
 a:hover { color: var(--primary-strong); }
 p { margin: 0; }
@@ -94,7 +97,7 @@ h1 { margin: 0; font-size: var(--fs-xl); line-height: 1.25; font-weight: var(--f
 .intro { display: flex; align-items: center; justify-content: space-between; gap: var(--s6); padding-block: var(--s6) var(--s5); }
 .intro .text { max-width: 680px; display: flex; flex-direction: column; gap: var(--s3); }
 .lead { color: var(--ink-2); }
-.intro .logo { width: 200px; flex: none; }
+.intro .logo { width: 280px; height: auto; flex: none; }
 .intro-actions { display: flex; gap: var(--s3); flex-wrap: wrap; margin-top: var(--s1); }
 
 /* buttons */
@@ -173,8 +176,8 @@ input:focus-visible, select:focus-visible { outline: 3px solid var(--primary); o
 details.adv { border: 1px solid var(--line); border-radius: var(--radius); background: var(--surface); }
 details.adv summary { cursor: pointer; padding: var(--s3) var(--s4); font-size: var(--fs-sm); font-weight: var(--fw-medium); min-height: 44px; display: flex; align-items: center; list-style: none; gap: var(--s2); border-radius: var(--radius); }
 details.adv summary::-webkit-details-marker { display: none; }
-details.adv summary::before { content: ""; width: 7px; height: 7px; border-right: 2px solid var(--ink-2); border-bottom: 2px solid var(--ink-2); transform: rotate(-45deg); transition: transform 0.15s; margin-right: var(--s1); }
-details.adv[open] summary::before { transform: rotate(45deg); }
+details.adv summary .chev { color: var(--ink-2); transition: transform 0.15s; }
+details.adv[open] summary .chev { transform: rotate(90deg); }
 .adv-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: var(--s4); padding: 0 var(--s4) var(--s4); }
 .adv-grid .full { grid-column: 1 / -1; }
 
@@ -236,7 +239,7 @@ thead th { position: sticky; top: 0; background: #eef0f7; z-index: 2; font-weigh
 thead th button { all: unset; box-sizing: border-box; display: flex; align-items: center; gap: var(--s1); width: 100%; padding: var(--s2) var(--s3); cursor: pointer; font-weight: var(--fw-medium); }
 thead th button:hover { background: var(--primary-line); }
 thead th button:focus-visible { outline: 3px solid var(--primary); outline-offset: -3px; }
-thead th .arrow { width: 10px; color: var(--primary); font-size: var(--fs-xs); }
+thead th .arrow { display: inline-flex; width: 16px; height: 16px; color: var(--primary); }
 td.num, th.num, th.num button { text-align: right; justify-content: flex-end; font-variant-numeric: tabular-nums; }
 td.desc { white-space: normal; min-width: 240px; max-width: 420px; color: var(--ink-2); }
 td.name { font-family: var(--mono); font-size: var(--fs-xs); }
@@ -284,8 +287,9 @@ tbody tr.flash { animation: flash 1.2s ease-out; }
 .doc dl { margin: 0; display: grid; grid-template-columns: 1fr; gap: var(--s3); }
 .doc dt { font-weight: var(--fw-medium); color: var(--ink); }
 .doc dd { margin: 0; }
-.doc .figure-dark { background: #2b2f3d; border-radius: var(--radius); padding: var(--s3); }
-.doc .figure-dark img { display: block; width: 100%; height: auto; }
+.doc .figure-box { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: var(--s4); }
+.doc .figure-box img { display: block; width: 100%; max-width: 560px; height: auto; margin: 0 auto; }
+.mk { display: inline-flex; align-items: center; justify-content: center; width: 18px; height: 18px; border-radius: 50%; background: var(--primary); color: #fff; font-size: var(--fs-xs); font-weight: var(--fw-bold); line-height: 1; vertical-align: 1px; }
 .doc .formula { font-family: var(--mono); font-size: var(--fs-sm); background: var(--primary-soft); color: var(--ink); padding: var(--s3) var(--s4); border-radius: var(--radius); overflow-x: auto; }
 .doc .errs { width: 100%; border: 1px solid var(--line); border-radius: var(--radius); background: var(--surface); }
 .doc .errs th, .doc .errs td { white-space: normal; vertical-align: top; }

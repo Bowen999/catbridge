@@ -5,14 +5,16 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>CAT Bridge Tutorial</title>
 <meta name="description" content="Input formats, parameters, results and common errors of CAT Bridge.">
-<link rel="icon" type="image/png" href="img/favicon.png">
-<link rel="stylesheet" href="app.css?v=7">
+<link rel="icon" type="image/svg+xml" href="img/favicon.svg">
+<link rel="icon" type="image/png" sizes="32x32" href="img/favicon-32.png">
+<link rel="apple-touch-icon" href="img/apple-touch-icon.png">
+<link rel="stylesheet" href="app.css?v=9">
 </head>
 <body>
 <a class="skip" href="#main">Skip to content</a>
 <header class="site-header">
   <div class="wrap">
-    <a class="brand" href="index.html"><img src="img/cat-white.png" alt="" width="52" height="36"><span>CAT Bridge</span></a>
+    <a class="brand" href="index.html"><img src="img/logo-mark-white.svg" alt="" width="49" height="36"><span>CAT Bridge</span></a>
     <nav class="nav" aria-label="Main">
       <a href="index.html">Analysis</a>
       <a href="tutorial.html" aria-current="page">Tutorial</a>
@@ -37,12 +39,12 @@
   </ul>
 
   <figure>
-    <div class="figure-dark"><img src="input1.svg" alt="Gene table and metabolite table: names in the first column, one column per sample or time point." width="4400" height="2475"></div>
-    <figcaption>Gene table and metabolite table. The header of the first column can be any text; it does not have to be &ldquo;Name&rdquo;. Replicates are defined by the design table, not by an underscore in the column names.</figcaption>
+    <div class="figure-box"><img src="input1.svg" alt="Gene table and metabolite table: names in the first column, one column per sample, in time order." width="440" height="364"></div>
+    <figcaption><span class="mk">1</span> Names of genes or metabolites. The header of this column can be any text. <span class="mk">2</span> One column per sample, in time order; both tables have the same columns. <span class="mk">3</span> Raw counts (gene table) or intensities (metabolite table). Replicates are defined by the design table, not by an underscore in the column names.</figcaption>
   </figure>
   <figure>
-    <div class="figure-dark"><img src="input2.svg" alt="Annotation table and design table." width="4400" height="2475"></div>
-    <figcaption>Annotation table and design table. The annotation table needs a column named Description; the design table needs a column named group. The headers of their first columns can be any text. Without replicates, do not add a design table.</figcaption>
+    <div class="figure-box"><img src="input2.svg" alt="Design table with the columns sample and group, and annotation table with the columns gene name and Description." width="440" height="386"></div>
+    <figcaption>Design table: <span class="mk">1</span> sample names, identical to the column headers of the two tables; <span class="mk">2</span> group, the time point. Replicates share a group. Annotation table: <span class="mk">1</span> gene names; <span class="mk">2</span> a column named Description. The headers of the first columns can be any text. Without replicates, do not add a design table.</figcaption>
   </figure>
 
   <p><strong>Target metabolite.</strong> Choose one row of the metabolite table. It must have a value at every time point and must not be constant.</p>

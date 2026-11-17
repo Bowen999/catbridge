@@ -5,15 +5,26 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>CAT Bridge</title>
 <meta name="description" content="CAT Bridge ranks genes by how closely their expression time course follows a target metabolite. The analysis runs in your browser.">
-<link rel="icon" type="image/png" href="img/favicon.png">
-<link rel="stylesheet" href="app.css?v=7">
+<link rel="icon" type="image/svg+xml" href="img/favicon.svg">
+<link rel="icon" type="image/png" sizes="32x32" href="img/favicon-32.png">
+<link rel="apple-touch-icon" href="img/apple-touch-icon.png">
+<link rel="stylesheet" href="app.css?v=9">
 </head>
 <body>
+<svg xmlns="http://www.w3.org/2000/svg" width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <symbol id="i-gene" viewBox="0 0 24 24"><path d="M8 3c0 5 8 5 8 9s-8 4-8 9M16 3c0 5-8 5-8 9s8 4 8 9M9.2 6.6h5.6M9.2 17.4h5.6"/></symbol>
+  <symbol id="i-metabolite" viewBox="0 0 24 24"><path d="M9.5 6.5l4.6 2.7v5.6l-4.6 2.7-4.6-2.7V9.2z"/><path d="M14.1 9.2l3.4-2"/><circle cx="19" cy="6.4" r="1.9"/><path d="M14.1 14.8l3.4 2"/><circle cx="19" cy="17.6" r="1.9"/></symbol>
+  <symbol id="i-design" viewBox="0 0 24 24"><rect x="3" y="3.5" width="8" height="17" rx="2.5"/><rect x="13" y="3.5" width="8" height="17" rx="2.5"/><g fill="currentColor" stroke="none"><circle cx="7" cy="8" r="1.3"/><circle cx="7" cy="12" r="1.3"/><circle cx="7" cy="16" r="1.3"/><circle cx="17" cy="8" r="1.3"/><circle cx="17" cy="12" r="1.3"/><circle cx="17" cy="16" r="1.3"/></g></symbol>
+  <symbol id="i-annotation" viewBox="0 0 24 24"><path d="M3.5 12.2V5a1.5 1.5 0 0 1 1.5-1.5h7.2l8.2 8.2a1.5 1.5 0 0 1 0 2.1l-6.4 6.4a1.5 1.5 0 0 1-2.1 0z"/><circle cx="8.3" cy="8.3" r="1.3"/></symbol>
+  <symbol id="i-chevron" viewBox="0 0 24 24"><path d="M9 5.5l6.5 6.5L9 18.5"/></symbol>
+  <symbol id="i-arrow-up" viewBox="0 0 24 24"><path d="M12 19.5v-15M5.5 11L12 4.5 18.5 11"/></symbol>
+  <symbol id="i-arrow-down" viewBox="0 0 24 24"><path d="M12 4.5v15M5.5 13L12 19.5 18.5 13"/></symbol>
+</svg>
 <a class="skip" href="#main">Skip to content</a>
 
 <header class="site-header">
   <div class="wrap">
-    <a class="brand" href="index.html"><img src="img/cat-white.png" alt="" width="52" height="36"><span>CAT Bridge</span></a>
+    <a class="brand" href="index.html"><img src="img/logo-mark-white.svg" alt="" width="49" height="36"><span>CAT Bridge</span></a>
     <nav class="nav" aria-label="Main">
       <a href="index.html" aria-current="page">Analysis</a>
       <a href="tutorial.html">Tutorial</a>
@@ -33,7 +44,7 @@
         <button type="button" class="btn btn-quiet" id="btn-reset">Clear all</button>
       </div>
     </div>
-    <img class="logo" src="img/logo-full.png" alt="CAT Bridge: Compounds And Transcripts Bridge" width="200" height="137">
+    <img class="logo" src="img/logo-full.svg" alt="CAT Bridge: Compounds And Transcripts Bridge" width="280" height="102">
   </section>
 
   <div class="wrap">
@@ -41,7 +52,7 @@
       <div class="slots">
         <div class="slot" data-role="gene">
           <div class="slot-head">
-            <svg class="slot-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" aria-hidden="true"><path d="M7 3c0 6 10 6 10 12s-10 6-10 6M17 3c0 6-10 6-10 12s10 6 10 6M8.3 7.5h7.4M8.3 16.5h7.4M12 12h0"/></svg>
+            <svg class="ico slot-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-gene"/></svg>
             <label class="slot-label" for="file-gene">Gene table</label>
             <span class="tag tag-req push">Required</span>
             <button type="button" class="btn btn-quiet btn-danger-quiet push" data-remove="gene" hidden>Remove</button>
@@ -54,7 +65,7 @@
 
         <div class="slot" data-role="metabolite">
           <div class="slot-head">
-            <svg class="slot-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 3h6M10 3v6l-5.2 9a2 2 0 0 0 1.7 3h11a2 2 0 0 0 1.7-3L14 9V3M7.5 15h9"/></svg>
+            <svg class="ico slot-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-metabolite"/></svg>
             <label class="slot-label" for="file-metabolite">Metabolite table</label>
             <span class="tag tag-req push">Required</span>
             <button type="button" class="btn btn-quiet btn-danger-quiet push" data-remove="metabolite" hidden>Remove</button>
@@ -67,7 +78,7 @@
 
         <div class="slot" data-role="design">
           <div class="slot-head">
-            <svg class="slot-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3.5" y="4" width="17" height="16" rx="2"/><path d="M3.5 9.5h17M9.5 9.5V20M15 9.5V20"/></svg>
+            <svg class="ico slot-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-design"/></svg>
             <label class="slot-label" for="file-design">Design table</label>
             <span class="tag push">Optional</span>
             <button type="button" class="btn btn-quiet btn-danger-quiet push" data-remove="design" hidden>Remove</button>
@@ -80,7 +91,7 @@
 
         <div class="slot" data-role="annotation">
           <div class="slot-head">
-            <svg class="slot-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3.5 12.2V4.5a1 1 0 0 1 1-1h7.7l8.3 8.3a1.4 1.4 0 0 1 0 2l-6.2 6.2a1.4 1.4 0 0 1-2 0z"/><circle cx="8" cy="8" r="1.2"/></svg>
+            <svg class="ico slot-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-annotation"/></svg>
             <label class="slot-label" for="file-annotation">Annotation table</label>
             <span class="tag push">Optional</span>
             <button type="button" class="btn btn-quiet btn-danger-quiet push" data-remove="annotation" hidden>Remove</button>
@@ -113,7 +124,7 @@
         </div>
         <div class="adv-wrap field">
           <details class="adv" id="adv">
-            <summary>Advanced</summary>
+            <summary><svg class="ico ico-sm chev" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-chevron"/></svg>Advanced</summary>
             <div class="adv-grid">
               <div class="field"><label for="p-clusters">Clusters</label><input type="number" id="p-clusters" value="8" min="0" step="1" inputmode="numeric"><p class="hint">0: no clustering</p></div>
               <div class="field"><label for="p-lag">Lag</label><input type="number" id="p-lag" value="1" min="1" step="1" inputmode="numeric"><p class="hint">Granger, CCF</p></div>
@@ -195,8 +206,8 @@
   </div>
 </footer>
 
-<script src="checks.js?v=7"></script>
-<script src="charts.js?v=7"></script>
-<script src="app.js?v=7"></script>
+<script src="checks.js?v=9"></script>
+<script src="charts.js?v=9"></script>
+<script src="app.js?v=9"></script>
 </body>
 </html>
