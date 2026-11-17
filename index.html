@@ -1,251 +1,202 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CAT-Bridge Status Update</title>
-    <style>
-        :root {
-            --primary-color: #006abc; /* Cooler Blue */
-            --secondary-color: #263238; /* Dark Blue Grey */
-            --text-color: #eceff1; /* Light Grey for dark backgrounds */
-            --background-color: #1e1e1e; /* Very Dark Grey/Almost Black */
-            --container-background: #2a2a2a; /* Darker container */
-            --accent-color: #006abc; /* New Green Accent */
-            --font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            --border-radius: 10px;
-            --box-shadow: 0 12px 25px rgba(0, 0, 0, 0.3), 0 8px 10px rgba(0, 0, 0, 0.2);
-            --primary-darker-shade: #004376; /* Darker shade for the new primary blue */
-        }
-
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
-
-        body {
-            font-family: var(--font-family);
-            background: linear-gradient(135deg, var(--background-color) 0%, #2c3e50 100%);
-            color: var(--text-color);
-            margin: 0;
-            padding: 20px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            line-height: 1.7;
-            font-size: 16px;
-            box-sizing: border-box;
-        }
-
-        .container {
-            background-color: var(--container-background);
-            padding: 45px 55px;
-            border-radius: var(--border-radius);
-            box-shadow: var(--box-shadow);
-            text-align: center;
-            max-width: 650px;
-            width: 100%;
-            border-top: 6px solid var(--primary-color); /* Uses primary color */
-            animation: slideInUp 0.8s ease-out forwards;
-            opacity: 0;
-        }
-
-        @keyframes slideInUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .icon-wrapper {
-            background-color: var(--primary-color); /* Uses primary color */
-            width: 80px;
-            height: 80px;
-            border-radius: 50%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            margin: -85px auto 25px auto; /* Pulls icon partially outside the box */
-            box-shadow: 0 6px 12px rgba(0, 106, 188, 0.4); /* Adjusted shadow for primary color */
-            border: 4px solid var(--container-background);
-            position: relative; /* Ensures it's above the container's top border */
-        }
-
-        .icon-wrapper .fas {
-            font-size: 2.5em;
-            color: #ffffff;
-        }
-
-        .logo {
-            font-size: 2.8em;
-            font-weight: 700;
-            color: var(--primary-color); /* Main part of logo uses primary color (blue) */
-            margin-bottom: 10px;
-            letter-spacing: 0.5px;
-        }
-
-        .logo span {
-            color: var(--accent-color); /* "Bridge" part of logo uses new green accent */
-            font-weight: 700;
-        }
-
-        h1 {
-            color: var(--text-color);
-            font-size: 1.9em;
-            margin-bottom: 15px;
-            font-weight: 600;
-        }
-
-        p {
-            font-size: 1.1em;
-            margin-bottom: 20px;
-            color: #b0bec5; /* Lighter grey for paragraph text */
-        }
-
-        .highlight {
-            color: var(--accent-color); /* Highlighted text uses new green accent */
-            font-weight: 600;
-        }
-
-        .button-container {
-            margin-top: 35px;
-            margin-bottom: 20px; /* Added margin for spacing before tutorial link */
-        }
-
-        .button {
-            background: linear-gradient(145deg, var(--primary-color), var(--primary-darker-shade)); /* Gradient with primary and its darker shade */
-            color: #ffffff;
-            padding: 16px 35px;
-            text-decoration: none;
-            border-radius: var(--border-radius);
-            font-size: 1.15em;
-            font-weight: 600;
-            transition: all 0.3s ease;
-            display: inline-flex; /* For aligning icon and text */
-            align-items: center;
-            gap: 10px; /* Space between icon and text */
-            box-shadow: 0 5px 15px rgba(0, 106, 188, 0.3); /* Adjusted shadow for primary color */
-            border: none;
-        }
-
-        .button:hover {
-            background: linear-gradient(145deg, var(--primary-darker-shade), var(--primary-color)); /* Reversed gradient on hover */
-            transform: translateY(-3px) scale(1.03);
-            box-shadow: 0 8px 20px rgba(0, 106, 188, 0.5); /* Adjusted shadow for primary color */
-        }
-
-        .button .fab {
-            font-size: 1.2em;
-        }
-        
-        .tutorial-link-container p {
-            margin-top: 25px; /* Space above the tutorial link */
-            font-size: 1em;
-        }
-
-        .tutorial-link-container a {
-            color: var(--accent-color);
-            text-decoration: none;
-            font-weight: 600;
-            border-bottom: 1px dashed var(--accent-color);
-            padding-bottom: 2px;
-            transition: color 0.3s ease, border-bottom-color 0.3s ease;
-        }
-
-        .tutorial-link-container a:hover {
-            color: var(--primary-color);
-            border-bottom-color: var(--primary-color);
-        }
-
-
-        footer {
-            margin-top: 40px;
-            font-size: 0.95em;
-            color: #78909c; /* Muted grey for footer */
-        }
-
-        footer a {
-            color: var(--primary-color); /* Footer links use primary color */
-            text-decoration: none;
-            font-weight: 600;
-        }
-
-        footer a:hover {
-            color: var(--accent-color); /* Footer link hover uses new green accent */
-            text-decoration: underline;
-        }
-
-        /* Responsive adjustments */
-        @media (max-width: 768px) {
-            .container {
-                padding: 35px 30px;
-                margin-top: 60px; /* Adjust for icon overlap */
-            }
-            .icon-wrapper {
-                width: 70px;
-                height: 70px;
-                margin: -75px auto 20px auto;
-            }
-            .icon-wrapper .fas {
-                font-size: 2em;
-            }
-            .logo {
-                font-size: 2.4em;
-            }
-            h1 {
-                font-size: 1.6em;
-            }
-            p {
-                font-size: 1em;
-            }
-            .button {
-                padding: 14px 28px;
-                font-size: 1.05em;
-            }
-        }
-         @media (max-width: 480px) {
-            .container {
-                padding: 30px 20px;
-            }
-             h1 {
-                font-size: 1.4em;
-            }
-            .logo {
-                font-size: 2em;
-            }
-         }
-
-    </style>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CAT Bridge</title>
+<meta name="description" content="CAT Bridge ranks genes by how closely their expression time course follows a target metabolite. The analysis runs in your browser.">
+<link rel="icon" type="image/png" href="img/favicon.png">
+<link rel="stylesheet" href="app.css?v=7">
 </head>
 <body>
-    <div class="container">
-        <div class="icon-wrapper">
-            <i class="fas fa-sync-alt"></i> </div>
-        <div class="logo">CAT<span>-Bridge</span></div> <h1>Important Update: Web Version Enhancements</h1>
-        <p>
-            We apologize, <strong class="highlight">CAT-Bridge web server</strong> i is temporarily unavailable due to maintenance. 
-        <p>
-            While the web version is being updated, we encourage you to utilize the robust <strong class="highlight">Python package</strong> or the <strong class="highlight">standalone client version</strong> for full access.
-        </p>
-        <div class="button-container">
-            <a href="https://github.com/Bowen999/CAT-Bridge" class="button" target="_blank" rel="noopener noreferrer">
-                <i class="fab fa-github"></i> Access on GitHub
-            </a>
-        </div>
-        <div class="tutorial-link-container">
-            <p>
-                Need help getting started? Check out our <a href="https://www.catbridge.work/tutorial.html" target="_blank" rel="noopener noreferrer">CAT-Bridge Tutorial</a>.
-            </p>
-        </div>
-        <footer>
-            <p>
-                For any questions, please send emial to by172@georgetown.edu
-            </p>
-            <p>鲁ICP备2023024583号-1</p>
-        </footer>
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="index.html"><img src="img/cat-white.png" alt="" width="52" height="36"><span>CAT Bridge</span></a>
+    <nav class="nav" aria-label="Main">
+      <a href="index.html" aria-current="page">Analysis</a>
+      <a href="tutorial.html">Tutorial</a>
+      <a href="https://github.com/Bowen999/CAT-Bridge" rel="noopener">GitHub</a>
+      <a href="https://pypi.org/project/catbridge/" rel="noopener">PyPI</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+  <section class="wrap intro" aria-label="Introduction">
+    <div class="text">
+      <h1>Rank genes by how closely they follow a target metabolite</h1>
+      <p class="lead">Select a gene table and a metabolite table, choose the target metabolite and run. Your data are processed in your browser and are not uploaded.</p>
+      <div class="intro-actions">
+        <button type="button" class="btn" id="btn-example">Load example data</button>
+        <button type="button" class="btn btn-quiet" id="btn-reset">Clear all</button>
+      </div>
     </div>
+    <img class="logo" src="img/logo-full.png" alt="CAT Bridge: Compounds And Transcripts Bridge" width="200" height="137">
+  </section>
+
+  <div class="wrap">
+    <form id="form" class="panel stack" novalidate autocomplete="off">
+      <div class="slots">
+        <div class="slot" data-role="gene">
+          <div class="slot-head">
+            <svg class="slot-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" aria-hidden="true"><path d="M7 3c0 6 10 6 10 12s-10 6-10 6M17 3c0 6-10 6-10 12s10 6 10 6M8.3 7.5h7.4M8.3 16.5h7.4M12 12h0"/></svg>
+            <label class="slot-label" for="file-gene">Gene table</label>
+            <span class="tag tag-req push">Required</span>
+            <button type="button" class="btn btn-quiet btn-danger-quiet push" data-remove="gene" hidden>Remove</button>
+          </div>
+          <div class="drop"><input type="file" id="file-gene" data-role="gene" accept=".tsv,.csv,.txt,.xlsx,.xls" aria-describedby="hint-gene msgs-gene">
+            <div class="drop-body"><span class="drop-main"><strong>Choose a file</strong> or drop it here</span><span class="drop-meta">.tsv, .csv or .txt</span></div></div>
+          <p class="hint" id="hint-gene">Rows: genes. Columns: samples or time points, in time order.</p>
+          <ul class="msgs" id="msgs-gene" aria-live="polite"></ul>
+        </div>
+
+        <div class="slot" data-role="metabolite">
+          <div class="slot-head">
+            <svg class="slot-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 3h6M10 3v6l-5.2 9a2 2 0 0 0 1.7 3h11a2 2 0 0 0 1.7-3L14 9V3M7.5 15h9"/></svg>
+            <label class="slot-label" for="file-metabolite">Metabolite table</label>
+            <span class="tag tag-req push">Required</span>
+            <button type="button" class="btn btn-quiet btn-danger-quiet push" data-remove="metabolite" hidden>Remove</button>
+          </div>
+          <div class="drop"><input type="file" id="file-metabolite" data-role="metabolite" accept=".tsv,.csv,.txt,.xlsx,.xls" aria-describedby="hint-metabolite msgs-metabolite">
+            <div class="drop-body"><span class="drop-main"><strong>Choose a file</strong> or drop it here</span><span class="drop-meta">.tsv, .csv or .txt</span></div></div>
+          <p class="hint" id="hint-metabolite">Rows: metabolites. Same columns as the gene table.</p>
+          <ul class="msgs" id="msgs-metabolite" aria-live="polite"></ul>
+        </div>
+
+        <div class="slot" data-role="design">
+          <div class="slot-head">
+            <svg class="slot-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3.5" y="4" width="17" height="16" rx="2"/><path d="M3.5 9.5h17M9.5 9.5V20M15 9.5V20"/></svg>
+            <label class="slot-label" for="file-design">Design table</label>
+            <span class="tag push">Optional</span>
+            <button type="button" class="btn btn-quiet btn-danger-quiet push" data-remove="design" hidden>Remove</button>
+          </div>
+          <div class="drop"><input type="file" id="file-design" data-role="design" accept=".tsv,.csv,.txt,.xlsx,.xls" aria-describedby="hint-design msgs-design">
+            <div class="drop-body"><span class="drop-main"><strong>Choose a file</strong> or drop it here</span><span class="drop-meta">.tsv, .csv or .txt</span></div></div>
+          <p class="hint" id="hint-design">For replicates. Columns: sample, group (the time point).</p>
+          <ul class="msgs" id="msgs-design" aria-live="polite"></ul>
+        </div>
+
+        <div class="slot" data-role="annotation">
+          <div class="slot-head">
+            <svg class="slot-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3.5 12.2V4.5a1 1 0 0 1 1-1h7.7l8.3 8.3a1.4 1.4 0 0 1 0 2l-6.2 6.2a1.4 1.4 0 0 1-2 0z"/><circle cx="8" cy="8" r="1.2"/></svg>
+            <label class="slot-label" for="file-annotation">Annotation table</label>
+            <span class="tag push">Optional</span>
+            <button type="button" class="btn btn-quiet btn-danger-quiet push" data-remove="annotation" hidden>Remove</button>
+          </div>
+          <div class="drop"><input type="file" id="file-annotation" data-role="annotation" accept=".tsv,.csv,.txt,.xlsx,.xls" aria-describedby="hint-annotation msgs-annotation">
+            <div class="drop-body"><span class="drop-main"><strong>Choose a file</strong> or drop it here</span><span class="drop-meta">.tsv, .csv or .txt</span></div></div>
+          <p class="hint" id="hint-annotation">Columns: gene name, Description. Enzyme-like descriptions raise the score.</p>
+          <ul class="msgs" id="msgs-annotation" aria-live="polite"></ul>
+        </div>
+      </div>
+
+      <hr class="divider">
+
+      <div class="options">
+        <div class="field">
+          <label for="target">Target metabolite</label>
+          <div class="combo">
+            <input type="text" id="target" role="combobox" aria-expanded="false" aria-controls="target-list" aria-autocomplete="list" aria-describedby="target-hint msgs-target" placeholder="Add the metabolite table first" disabled spellcheck="false">
+            <ul class="listbox" id="target-list" role="listbox" aria-label="Metabolites" hidden></ul>
+          </div>
+          <p class="hint" id="target-hint">Search the rows of the metabolite table.</p>
+          <ul class="msgs" id="msgs-target" aria-live="polite"></ul>
+        </div>
+        <div class="field">
+          <label for="metric">Metric</label>
+          <select id="metric" aria-describedby="metric-hint">
+            <option>Granger</option><option selected>CCM</option><option>CCA</option><option>DTW</option><option>CCF</option><option>Spearman</option><option>Pearson</option>
+          </select>
+          <p class="hint" id="metric-hint"></p>
+        </div>
+        <div class="adv-wrap field">
+          <details class="adv" id="adv">
+            <summary>Advanced</summary>
+            <div class="adv-grid">
+              <div class="field"><label for="p-clusters">Clusters</label><input type="number" id="p-clusters" value="8" min="0" step="1" inputmode="numeric"><p class="hint">0: no clustering</p></div>
+              <div class="field"><label for="p-lag">Lag</label><input type="number" id="p-lag" value="1" min="1" step="1" inputmode="numeric"><p class="hint">Granger, CCF</p></div>
+              <div class="field"><label for="p-E">E</label><input type="number" id="p-E" value="3" min="1" step="1" inputmode="numeric"><p class="hint">CCM embedding dimension</p></div>
+              <div class="field"><label for="p-tau">Tau</label><input type="number" id="p-tau" value="1" min="1" step="1" inputmode="numeric"><p class="hint">CCM delay</p></div>
+            </div>
+          </details>
+          <ul class="msgs" id="msgs-params" aria-live="polite"></ul>
+        </div>
+      </div>
+
+      <div class="runbar">
+        <button type="submit" class="btn btn-primary" id="btn-run" disabled>Run</button>
+        <button type="button" class="btn" id="btn-cancel" hidden>Cancel</button>
+        <p class="run-status" id="run-status" role="status" aria-live="polite"></p>
+      </div>
+      <p class="runtime" id="runtime-note"></p>
+    </form>
+
+    <section class="panel progress-card" id="progress" aria-label="Progress" hidden>
+      <div class="progress-top">
+        <p class="progress-title" id="progress-title">Running</p>
+        <span class="runtime" id="progress-elapsed"></span>
+      </div>
+      <div class="bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" id="progress-bar"><span></span></div>
+      <ol class="steps" id="steps"></ol>
+      <p class="progress-note" id="progress-note"></p>
+    </section>
+
+    <section class="panel failure" id="failure" aria-label="Error" hidden>
+      <ul class="msgs" id="failure-msgs"></ul>
+      <details><summary>Technical details</summary><pre id="failure-trace"></pre></details>
+    </section>
+
+    <section class="panel stack" id="results" aria-label="Results" hidden>
+      <div class="result-head">
+        <div class="result-sum" id="result-sum"></div>
+        <button type="button" class="btn" id="btn-download">Download CSV</button>
+      </div>
+      <ul class="msgs" id="result-warnings"></ul>
+      <div class="charts">
+        <figure>
+          <div class="chart-box" id="chart-curve"></div>
+          <figcaption id="cap-curve"></figcaption>
+        </figure>
+        <figure>
+          <div class="chart-box" id="chart-scatter"></div>
+          <figcaption id="cap-scatter"></figcaption>
+        </figure>
+      </div>
+      <div>
+        <div class="table-tools">
+          <input type="search" class="search" id="table-search" placeholder="Search gene or description" aria-label="Search gene or description">
+          <span class="count" id="table-count" role="status" aria-live="polite"></span>
+        </div>
+        <div class="table-wrap" id="table-wrap" tabindex="-1">
+          <table id="table" aria-label="Ranked genes"><thead></thead><tbody></tbody></table>
+        </div>
+        <div class="table-foot">
+          <span class="count" id="table-foot-count"></span>
+          <button type="button" class="btn" id="btn-more">Show 100 more</button>
+        </div>
+      </div>
+    </section>
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <ul>
+      <li><a href="tutorial.html">Tutorial</a></li>
+      <li><a href="https://github.com/Bowen999/CAT-Bridge" rel="noopener">GitHub</a></li>
+      <li><a href="https://pypi.org/project/catbridge/" rel="noopener">PyPI</a></li>
+    </ul>
+    <div class="legal">
+      <p>For any questions, please send an email to <a href="mailto:by172@georgetown.edu">by172@georgetown.edu</a></p>
+      <p>鲁ICP备2023024583号-1</p>
+    </div>
+  </div>
+</footer>
+
+<script src="checks.js?v=7"></script>
+<script src="charts.js?v=7"></script>
+<script src="app.js?v=7"></script>
 </body>
 </html>

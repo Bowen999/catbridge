@@ -1,395 +1,109 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CAT-Bridge Tutorial</title>
-    <style>
-        :root {
-            --primary-color: #006abc; /* Blue */
-            --text-color: #eceff1; /* Light Grey / White */
-            --text-secondary-color: #b0bec5; /* Softer white for paragraphs */
-            --background-color: #1e1e1e; /* Very Dark Grey/Almost Black */
-            --container-background: #2a2a2a; /* Darker container */
-            --border-color: #444;
-            --font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            --border-radius: 10px;
-            --box-shadow: 0 12px 25px rgba(0, 0, 0, 0.3), 0 8px 10px rgba(0, 0, 0, 0.2);
-            --code-background: #1a1a1a; /* Dark background for code blocks */
-            --code-text-color: var(--text-color);
-            --link-color: var(--primary-color);
-            --link-hover-color: #64b5f6; /* Lighter blue for link hover */
-        }
-
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
-
-        body {
-            font-family: var(--font-family);
-            background-color: var(--background-color);
-            color: var(--text-color);
-            margin: 0;
-            padding: 0;
-            line-height: 1.7;
-            font-size: 16px;
-        }
-
-        .tutorial-header {
-            background-color: var(--primary-color);
-            color: white; /* Header text is white */
-            padding: 50px 20px;
-            text-align: center;
-        }
-
-        .tutorial-header h1 {
-            margin: 0;
-            font-size: 2.8em;
-            font-weight: 700;
-        }
-        .tutorial-header .logo-main {
-            color: white; /* "CAT" is white */
-        }
-        .tutorial-header .logo-span {
-            color: #e3f2fd; /* "-Bridge" is a very light blue/off-white */
-            font-weight: normal;
-        }
-
-        .tutorial-container {
-            max-width: 900px;
-            margin: 40px auto;
-            padding: 20px 30px;
-            background-color: var(--container-background);
-            border-radius: var(--border-radius);
-            box-shadow: var(--box-shadow);
-        }
-
-        .tutorial-section {
-            margin-bottom: 40px;
-            padding-bottom: 30px;
-            border-bottom: 1px solid var(--border-color);
-        }
-        .tutorial-section:last-child {
-            border-bottom: none;
-            margin-bottom: 0;
-            padding-bottom: 0;
-        }
-
-        .tutorial-section h2 {
-            font-size: 2em;
-            color: var(--primary-color); /* Section titles are blue */
-            margin-top: 0;
-            margin-bottom: 20px;
-            scroll-margin-top: 80px; /* Offset for fixed header + some breathing room */
-        }
-        
-        .tutorial-section h3 {
-            font-size: 1.6em;
-            color: var(--primary-color); /* Sub-section titles (like in FAQ) are blue */
-            margin-top: 25px;
-            margin-bottom: 15px;
-        }
-
-        .tutorial-section p, .tutorial-section ul li {
-            font-size: 1.1em;
-            color: var(--text-secondary-color); /* Paragraph text is softer white */
-            margin-bottom: 15px;
-        }
-        
-        .tutorial-section ul {
-            padding-left: 20px;
-            list-style: disc;
-        }
-         .tutorial-section ul p { /* For paragraphs inside list items, if any */
-            margin-bottom: 5px;
-        }
-
-
-        .tutorial-section strong {
-            color: var(--primary-color); /* Strong emphasis is blue */
-            font-weight: 600;
-        }
-
-        .tutorial-section a {
-            color: var(--link-color); /* Links are blue */
-            text-decoration: none;
-            font-weight: 600;
-        }
-
-        .tutorial-section a:hover {
-            color: var(--link-hover-color); /* Link hover is lighter blue */
-            text-decoration: underline;
-        }
-
-        .tutorial-section .italic-gray { /* This class was in original, might not be used now */
-            font-style: italic;
-            color: #8892b0; 
-        }
-
-        .image-container {
-            margin: 20px 0;
-            text-align: center;
-        }
-
-        .image-container img {
-            max-width: 100%;
-            height: auto;
-            border-radius: var(--border-radius);
-            background-color: #333; 
-            border: 1px solid var(--border-color);
-        }
-        
-        .placeholder-text {
-            display: block;
-            color: #aaa;
-            font-style: italic;
-            margin-top: 5px;
-        }
-
-        .tutorial-section code {
-            background-color: var(--code-background);
-            color: var(--code-text-color); /* Code text is white/light grey */
-            padding: 3px 6px;
-            border-radius: 4px;
-            font-family: 'Courier New', Courier, monospace;
-            font-size: 0.95em;
-        }
-        
-        .tutorial-section p > code { /* For inline code within paragraphs */
-             word-break: break-all;
-        }
-
-        /* For block code if needed, though the provided HTML uses p > code */
-        .tutorial-section pre {
-            background-color: var(--code-background);
-            color: var(--code-text-color);
-            padding: 15px;
-            border-radius: var(--border-radius);
-            overflow-x: auto;
-            font-family: 'Courier New', Courier, monospace;
-            font-size: 0.95em;
-            margin-bottom: 15px;
-        }
-        .tutorial-section pre code {
-            padding: 0;
-            background-color: transparent;
-        }
-
-
-        .nav-sidebar {
-            position: fixed;
-            left: 20px;
-            top: 160px; /* Adjusted based on header height */
-            width: 220px;
-            max-height: calc(100vh - 180px); /* Prevent overlap with footer */
-            overflow-y: auto;
-            background-color: var(--container-background);
-            padding: 20px;
-            border-radius: var(--border-radius);
-            box-shadow: var(--box-shadow);
-        }
-
-        .nav-sidebar h3 {
-            color: var(--primary-color); /* Sidebar title is blue */
-            font-size: 1.4em;
-            margin-top: 0;
-            margin-bottom: 15px;
-        }
-
-        .nav-sidebar ul {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-        }
-
-        .nav-sidebar li a {
-            display: block;
-            padding: 10px 0;
-            color: var(--text-color); /* Sidebar links are white */
-            text-decoration: none;
-            font-size: 1em;
-            transition: color 0.3s ease;
-        }
-
-        .nav-sidebar li a:hover {
-            color: var(--link-hover-color); /* Sidebar link hover is lighter blue */
-        }
-        
-        .tutorial-content-area {
-             margin-left: 260px; /* Space for the sidebar */
-        }
-
-        /* Responsive adjustments */
-        @media (max-width: 1200px) {
-            .tutorial-content-area {
-                margin-left: 0;
-            }
-            .nav-sidebar {
-                position: static; 
-                width: auto;
-                margin: 0 auto 30px auto; 
-                max-width: 900px; 
-                max-height: none; /* Remove height restriction */
-                overflow-y: visible;
-            }
-             .tutorial-container {
-                margin: 20px auto;
-             }
-        }
-
-        @media (max-width: 768px) {
-            .tutorial-header h1 {
-                font-size: 2.2em;
-            }
-            .tutorial-section h2 {
-                font-size: 1.8em;
-            }
-             .tutorial-section h3 {
-                font-size: 1.4em;
-            }
-            .tutorial-section p, .tutorial-section ul li {
-                font-size: 1em;
-            }
-             .nav-sidebar {
-                padding: 15px;
-            }
-            .nav-sidebar h3 {
-                font-size: 1.2em;
-            }
-            .nav-sidebar li a {
-                font-size: 0.95em;
-            }
-        }
-         @media (max-width: 480px) {
-            .tutorial-header {
-                padding: 30px 15px;
-            }
-            .tutorial-header h1 {
-                font-size: 1.8em;
-            }
-            .tutorial-container {
-                padding: 15px;
-            }
-            .tutorial-section h2 {
-                font-size: 1.6em;
-            }
-             .tutorial-section h3 {
-                font-size: 1.3em;
-            }
-         }
-
-    </style>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CAT Bridge Tutorial</title>
+<meta name="description" content="Input formats, parameters, results and common errors of CAT Bridge.">
+<link rel="icon" type="image/png" href="img/favicon.png">
+<link rel="stylesheet" href="app.css?v=7">
 </head>
 <body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="index.html"><img src="img/cat-white.png" alt="" width="52" height="36"><span>CAT Bridge</span></a>
+    <nav class="nav" aria-label="Main">
+      <a href="index.html">Analysis</a>
+      <a href="tutorial.html" aria-current="page">Tutorial</a>
+      <a href="https://github.com/Bowen999/CAT-Bridge" rel="noopener">GitHub</a>
+      <a href="https://pypi.org/project/catbridge/" rel="noopener">PyPI</a>
+    </nav>
+  </div>
+</header>
 
-    <header class="tutorial-header">
-        <h1><span class="logo-main">CAT</span><span class="logo-span">-Bridge</span> Tutorial</h1>
-    </header>
+<main id="main" class="wrap">
+<article class="doc">
+  <h1>Tutorial</h1>
+  <p>CAT Bridge ranks genes by how closely their expression time course follows the time course of a target metabolite. The analysis runs in your browser: your tables are not uploaded. The first run downloads Python and its packages (about 45 MB); your browser keeps them for later visits.</p>
 
-    <div class="nav-sidebar">
-        <h3>Navigation</h3>
-        <ul>
-            <li><a href="#data-type-and-input">Data Type and Input</a></li>
-            <li><a href="#download">Download</a></li>
-            <li><a href="#faq">FAQ</a></li>
-            <li><a href="#updates">Updates</a></li>
-        </ul>
+  <p><strong>Tables.</strong> Every table is a <code>.tsv</code>, <code>.csv</code> or <code>.txt</code> file with a header row and names in the first column. Cells hold plain numbers; leave missing values empty (or <code>NA</code>) and use a point as the decimal mark. Excel files are not supported: save them as CSV first.</p>
+
+  <ul>
+    <li><strong>Gene table.</strong> Rows are genes, columns are samples (with a design table) or time points (without). The time order is the column order; names are never sorted. With a design table the values must be raw counts (DESeq2); without one, any non-negative expression values work.</li>
+    <li><strong>Metabolite table.</strong> Rows are metabolites. The columns must be the same as in the gene table, in the same order.</li>
+    <li><strong>Design table</strong> (optional). Only needed with replicates. One row per sample: the first column holds the sample names (the column headers of the two tables), the column <code>group</code> holds the time point. Replicates share a group. The two groups of the fold change need at least 2 samples each. Without replicates, do not add a design table.</li>
+    <li><strong>Annotation table</strong> (optional). The first column holds gene names; the column <code>Description</code> holds free text. Descriptions with enzyme words (names ending in -ase, enzyme, synthase) add a small bonus to the score.</li>
+  </ul>
+
+  <figure>
+    <div class="figure-dark"><img src="input1.svg" alt="Gene table and metabolite table: names in the first column, one column per sample or time point." width="4400" height="2475"></div>
+    <figcaption>Gene table and metabolite table. The header of the first column can be any text; it does not have to be &ldquo;Name&rdquo;. Replicates are defined by the design table, not by an underscore in the column names.</figcaption>
+  </figure>
+  <figure>
+    <div class="figure-dark"><img src="input2.svg" alt="Annotation table and design table." width="4400" height="2475"></div>
+    <figcaption>Annotation table and design table. The annotation table needs a column named Description; the design table needs a column named group. The headers of their first columns can be any text. Without replicates, do not add a design table.</figcaption>
+  </figure>
+
+  <p><strong>Target metabolite.</strong> Choose one row of the metabolite table. It must have a value at every time point and must not be constant.</p>
+
+  <p><strong>Metric.</strong> One measure of how closely a gene follows the target metabolite. The default is CCM.</p>
+  <dl>
+    <dt>Granger</dt><dd>Granger causality test. The p-value is used; lower is stronger. Needs more than 3 &times; lag + 1 time points.</dd>
+    <dt>CCM</dt><dd>Convergent cross mapping. Higher is stronger. Needs at least E + 2 points after embedding.</dd>
+    <dt>CCA</dt><dd>Canonical correlation. Higher is stronger.</dd>
+    <dt>DTW</dt><dd>Dynamic time warping distance. Lower is stronger.</dd>
+    <dt>CCF</dt><dd>Cross-correlation within the lag. Higher is stronger.</dd>
+    <dt>Spearman, Pearson</dt><dd>Rank and linear correlation. Higher is stronger; a negative correlation scores low.</dd>
+  </dl>
+
+  <p><strong>Advanced.</strong> Clusters is the number of clusters of the time courses (0 for none; default 8). Lag is used by Granger and CCF (default 1). E and tau are the embedding dimension and delay of CCM (defaults 3 and 1).</p>
+
+  <p><strong>Fold change.</strong> It is defined on one interval: the step between two adjacent time points in which the target metabolite rises fastest (largest increase of its mean; the earlier step if tied). The results show the two time points.</p>
+  <p class="formula">log2 fold change = log2(expression at the later time point / expression at the earlier time point)</p>
+  <p>Without a design table the expression values are used as they are, with a pseudocount of 1 added to both. With a design table, DESeq2 compares the raw counts of the two groups and shrinks the estimates. If the target never rises, the fold change is empty for all genes and counts as 0 in the score.</p>
+
+  <p><strong>Score.</strong> The metric, the fold change and the annotation score are each scaled to 0&ndash;1 (Granger as &minus;log10 p and DTW as &minus;distance, so that larger is always stronger). A missing value counts as 0. The annotation term is used only with an annotation table.</p>
+  <p class="formula">Score = sqrt(metric&sup2; + fold change&sup2; + annotation&sup2;), rescaled to 0&ndash;1</p>
+
+  <p><strong>Results.</strong> The table is ranked by score and shows the top 100 genes; search and sorting cover all genes, and &ldquo;Show 100 more&rdquo; extends the list. Select a row to draw the time courses of that gene and the target metabolite, each scaled to 0&ndash;1 (group means with replicates). In the scatter plot every gene is a point; select a point to find its row. Download CSV saves the full ranked table with the metric, fold change, cluster, annotation and, with a design table, the DESeq2 columns.</p>
+
+  <p><strong>Checks.</strong> Before the run, your browser checks: file type, empty files, separator, header, row lengths, name column, duplicated names and columns, non-numeric, infinite and negative values (all rows, the first 40 MB of a file), matching columns of the gene and metabolite tables, the design table (group column, sample names, replicates per group, including the two groups of the fold change), the annotation table (Description column, share of matching gene names) and the target metabolite. Errors block the run; warnings do not. Messages from the analysis itself appear unchanged next to the table they concern; the full trace is under Technical details.</p>
+
+  <div class="errs-wrap">
+  <table class="errs">
+    <thead><tr><th scope="col">Message</th><th scope="col">What to do</th></tr></thead>
+    <tbody>
+      <tr><td>Excel files are not supported</td><td>In Excel choose Save As &gt; CSV, then select the .csv file.</td></tr>
+      <tr><td>The columns of the gene and metabolite tables do not match</td><td>Use the same sample or time point names in the same order in both tables.</td></tr>
+      <tr><td>&hellip; not in the first column of the design table</td><td>Give the design table one row per sample, named exactly like the column headers.</td></tr>
+      <tr><td>The design table needs a column named &lsquo;group&rsquo;</td><td>Add a column named group with the time point of each sample.</td></tr>
+      <tr><td>&hellip; has only 1 sample</td><td>Add replicates, or remove the design table.</td></tr>
+      <tr><td>&hellip; is not a number</td><td>Replace the cell with a number, or leave it empty.</td></tr>
+      <tr><td>&hellip; is constant over time / has no value at &hellip;</td><td>Choose another target metabolite, or fill in the missing values.</td></tr>
+      <tr><td>None of the annotation names matches a gene name</td><td>Put the gene names of the gene table in the first column of the annotation table.</td></tr>
+      <tr><td>Only N time points</td><td>Warning. Use at least 4 time points; Granger and CCM need more.</td></tr>
+      <tr><td>Target &hellip; is not in the index</td><td>Choose the target metabolite from the list.</td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <p>The same analysis is available as a Python package: <code>pip install catbridge</code> (<a href="https://pypi.org/project/catbridge/" rel="noopener">PyPI</a>, <a href="https://github.com/Bowen999/CAT-Bridge" rel="noopener">GitHub</a>).</p>
+</article>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <ul>
+      <li><a href="index.html">Analysis</a></li>
+      <li><a href="https://github.com/Bowen999/CAT-Bridge" rel="noopener">GitHub</a></li>
+      <li><a href="https://pypi.org/project/catbridge/" rel="noopener">PyPI</a></li>
+    </ul>
+    <div class="legal">
+      <p>For any questions, please send an email to <a href="mailto:by172@georgetown.edu">by172@georgetown.edu</a></p>
+      <p>鲁ICP备2023024583号-1</p>
     </div>
-    
-    <div class="tutorial-content-area">
-        <main class="tutorial-container">
-            <section id="data-type-and-input" class="tutorial-section">
-                <h2>Data Type and Input</h2>
-                <p>All four uploaded files should be in tsv/csv format, with transcriptome and metabolome being mandatory.</p>
-                <p>Annotation and Study Design are optional (If there are no biological repetitions, please do not upload Study Design).</p>
-                <p>Annotations for non-model organisms are usually obtained through homologous annotation. Don't know how to do? Try <a href="http://eggnog-mapper.embl.de" target="_blank" rel="noopener noreferrer">eggNOG-mapper</a> or <a href="https://dbsloan.github.io/TS2019/exercises/local_blast.html" target="_blank" rel="noopener noreferrer">BLAST</a>?</p>
-                <div class="image-container">
-                    <img src="input1.svg" alt="Input format example 1">
-                </div>
-                <div class="image-container">
-                    <img src="input2.svg" alt="Input format example 2">
-                </div>
-                <p><strong>Targets</strong> refer to metabolites of interest and should be present in the metabolome file.<br><strong>Cluster Number</strong> refers to how many categories the genes will be clustered into.<br><strong>Method</strong> is used for dealing with biological repetitions (it is not required if there are no biological repetitions).</p>
-            </section>
-            
-            <section id="download" class="tutorial-section">
-                <h2>Download</h2>
-                <p>CAT Bridge offers more than just a web app; it also provides a <strong>standalone application</strong> and a <strong>Python library</strong>.</p>
-                
-                <h3>Python library</h3>
-                <p>For the Python library, you can easily download it using either:</p>
-                <p><code>pip install catbridge</code></p>
-                <p>or</p>
-                <p><code>conda install catbridge</code></p>
-                <p>The source code can be found at <a href="https://github.com/Bowen999/CAT-Bridge" target="_blank" rel="noopener noreferrer">GitHub</a> or <a href="https://pypi.org/project/catbridge/" target="_blank" rel="noopener noreferrer">PyPi</a>.</p>
-                <p>To help you get started, we provide a <a href="https://github.com/Bowen999/CAT-Bridge/blob/main/demo/case%20study.ipynb" target="_blank" rel="noopener noreferrer">demo</a> available for your reference.</p>
-                
-                <h3>Standalone application</h3>
-                <p>If you prefer the standalone application, you can download it by using the following command:</p>
-                <p><code>git clone https://github.com/Bowen999/CAT-Bridge/tree/main/client</code></p>
-                <p>Or go to <a href="https://github.com/Bowen999/CAT-Bridge/tree/main/client" target="_blank" rel="noopener noreferrer">GitHub</a> to download it.</p>
-                <p>After downloading, you can launch it using the command:</p>
-                <p><code>python run.py</code></p>
-            </section>
-
-            <section id="faq" class="tutorial-section">
-                <h2>FAQ</h2>
-                <h3 id="faq-methods">1. What are the methods? Which one should I choose?</h3>
-                <p>We have integrated seven distinct statistical methods.<br>Including Convergent Cross Mapping (CCM) and Granger Causality (Granger) for computing cause-and-effect relationships. As well as Canonical Correlation Analysis (CCA), Dynamic-Time-Warping (DTW), Cross-Correlation Function (CCF), Spearman Correlation Coefficient (Spearman), and Pearson Correlation Coefficient (Pearson) for calculating similarity.</p>
-                <p>Here are some useful links to help you understand these methods and choose the most suitable one for your experimental design:</p>
-                <ul>
-                    <li>CCM: <a href="https://phdinds-aim.github.io/time_series_handbook/06_ConvergentCrossMappingandSugiharaCausality/ccm_sugihara.html" target="_blank" rel="noopener noreferrer">Convergent Cross Mapping</a>, 
-                    <a href="https://www.youtube.com/watch?v=NrFdIz-D2yM" target="_blank" rel="noopener noreferrer">State Space Reconstruction: Convergent Cross Mapping Visualization</a>, <a href="https://elifesciences.org/articles/72518" target="_blank" rel="noopener noreferrer">Data-driven causal analysis of observational biological time series</a></li>
-                    <li>Granger: <a href="https://towardsdatascience.com/a-quick-introduction-on-granger-causality-testing-for-time-series-analysis-7113dc9420d2" target="_blank" rel="noopener noreferrer">A Quick Introduction On Granger Causality Testing For Time Series Analysis</a></li>
-                    <li>CCA: <a href="https://online.stat.psu.edu/stat505/book/export/html/682" target="_blank" rel="noopener noreferrer">Canonical Correlation Analysis</a></li>
-                    <li>DTW: <a href="https://builtin.com/data-science/dynamic-time-warping" target="_blank" rel="noopener noreferrer">An Introduction to Dynamic Time Warping</a></li>
-                    <li>CCF: <a href="https://scicoding.com/practical-guide-to-cross-correlation/" target="_blank" rel="noopener noreferrer">Practical Guide to Cross-Correlation</a></li>
-                    <li>Spearman & Pearson: <a href="https://www.surveymonkey.com/market-research/resources/pearson-correlation-vs-spearman-correlation/" target="_blank" rel="noopener noreferrer">Pearson correlation vs. Spearman correlation methods</a></li>
-                </ul>
-                <p><strong>If your data is in the form of time series, we recommend using CCM (Convergent Cross Mapping).</strong></p>
-
-                <h3 id="faq-annotation">2. How to obtain a gene functional annotation file?</h3>
-                <p>You can obtain this file through homology annotation tools or functional prediction tools.<br>For instance, you can try tools like <a href="http://eggnog-mapper.embl.de" target="_blank" rel="noopener noreferrer">eggNOG-mapper</a> or <a href="https://ftp.ncbi.nlm.nih.gov/blast/executables/blast+/LATEST/" target="_blank" rel="noopener noreferrer">BLAST+</a>.<br>We are providing a <a href="https://github.com/Bowen999/CAT-Bridge/blob/main/demo/pepper/Cchinense_longest_pep.fa" target="_blank" rel="noopener noreferrer">sequence files</a> of chili peppers for you to try out.</p>
-
-                <h3 id="faq-size-limit">3. Files size limitation?</h3>
-                <p>Yes. But we can support regular data sizes, such as 7 time points, each with 3 replicates (in other words, 21 samples), and the detection of 50,000 genes and 1,000 compounds.</p>
-                <p>If your data is exceptionally large, you can still perform the analysis by using the standalone application or importing the Python package.</p>
-                
-                <h3 id="faq-yuan-fang">4. How to use the Yuan Fang (AI Agent) to gain insights from analysis results based on knowledge?</h3>
-                <p>Yuan Fang operates on the OpenAI API, which requires an API Key for access <a href='https://platform.openai.com/docs/quickstart' target="_blank" rel="noopener noreferrer">click here for details on how to obtain one</a>. To prevent the leakage of the API Key due to network security concerns, this functionality is not available on our web version. Instead, please use our Python Package to access this feature. We are also in the process of integrating this functionality into our client-side application.</p>
-
-                <h3 id="faq-other-issues">5. Other issues</h3>
-                <p>If you have any other questions, encounter errors, or any suggestions, please feel free to contact me at by172@georgetown.edu.</p>
-            </section>
-
-            <section id="updates" class="tutorial-section">
-                <h2>Updates</h2>
-                <p>The standalone program provides version information of Python modules, and a Docker image. <strong>Jul.29.2024</strong></p>
-                <p>The website has been switched to HTTPS. <strong>Jul.18.2024</strong></p>
-                <p>Fixed the issue that the example files could not be found. <strong>May.09.2024</strong></p>
-            </section>
-        </main>
-    </div>
-    
-    <script>
-        // Smooth scroll for anchor links
-        document.querySelectorAll('.nav-sidebar a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                const targetId = this.getAttribute('href');
-                const targetElement = document.querySelector(targetId);
-                if (targetElement) {
-                    // Calculate position considering potential fixed header and some offset
-                    const headerOffset = 20; // Extra offset for better positioning below header/top of viewport
-                    const elementPosition = targetElement.getBoundingClientRect().top;
-                    const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
-    
-                    window.scrollTo({
-                        top: offsetPosition,
-                        behavior: "smooth"
-                    });
-                }
-            });
-        });
-    </script>
-
+  </div>
+</footer>
 </body>
 </html>
